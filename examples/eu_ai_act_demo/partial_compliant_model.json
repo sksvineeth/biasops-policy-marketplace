@@ -1,0 +1,36 @@
+{
+  "model_id": "autolend-ai-v2.1",
+  "model_name": "AutoLend AI",
+  "model_type": "XGBoost Classifier",
+  "version": "2.1.0",
+  "deployer": "NordBank AG",
+  "deployment_region": "EU",
+  "decision_type": "loan_approval",
+  "decision_impact": "significant",
+
+  "_comment_risk": "EU AI Act Annex III compliance fields",
+  "risk_management_system_documented": true,
+  "technical_documentation_complete": true,
+  "data_governance_policy_present": true,
+  "human_oversight_mechanism_defined": false,
+  "conformity_assessment_completed": false,
+  "transparency_information_provided": true,
+  "accuracy_metrics_documented": true,
+  "robustness_testing_completed": true,
+  "cybersecurity_measures_implemented": true,
+  "post_market_monitoring_plan_present": false,
+  "incident_reporting_mechanism_defined": false,
+
+  "_comment_metrics": "Model performance metrics",
+  "accuracy_score": 0.83,
+  "robustness_score": 0.79,
+  "explainability_score": 0.71,
+
+  "_comment_audit": "Partial compliance audit trail",
+  "technical_doc_version": "v2.1-2025-09",
+  "conformity_assessment_date": null,
+  "conformity_assessment_body": null,
+  "human_oversight_type": "none",
+  "post_market_monitoring_frequency": "none",
+  "eu_ai_act_database_registration": null
+}
