@@ -3,7 +3,6 @@
 
 from pathlib import Path
 
-import pytest
 
 from biasops.models import Policy
 from biasops.validator import (
