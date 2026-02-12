@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biasops.dev/schemas/evaluation/v1",
+  "title": "BiasOps Evaluation Result Schema",
+  "description": "JSON Schema for evaluation result documents produced by the engine.",
+  "type": "object",
+  "properties": {},
+  "required": []
+}

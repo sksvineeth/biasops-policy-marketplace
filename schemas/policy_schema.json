@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biasops.dev/schemas/policy/v1",
+  "title": "BiasOps Policy Schema",
+  "description": "JSON Schema for validating BiasOps policy documents.",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "version",
+    "domain",
+    "jurisdiction",
+    "regulation_references",
+    "bias_types_addressed",
+    "risk_level",
+    "enforcement_mode",
+    "policy_logic",
+    "remediation_steps",
+    "created_at",
+    "maintained_by"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique identifier for the policy."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human-readable policy name."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+",
+      "description": "Semantic version string (e.g. 1.0.0)."
+    },
+    "domain": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Application domain the policy applies to."
+    },
+    "jurisdiction": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Primary legal jurisdiction."
+    },
+    "regulation_references": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Regulations this policy helps satisfy.",
+      "items": {
+        "type": "object",
+        "required": ["article", "url", "jurisdiction"],
+        "properties": {
+          "article": {
+            "type": "string",
+            "minLength": 1
+          },
+          "url": {
+            "type": "string",
+            "minLength": 1
+          },
+          "jurisdiction": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "bias_types_addressed": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Bias categories covered by this policy."
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"],
+      "description": "Overall risk classification."
+    },
+    "enforcement_mode": {
+      "type": "string",
+      "enum": ["warn", "block", "audit"],
+      "description": "Action taken when a violation is detected."
+    },
+    "policy_logic": {
+      "type": "object",
+      "description": "Declarative rule tree evaluated by the engine."
+    },
+    "remediation_steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Ordered list of recommended remediation actions."
+    },
+    "created_at": {
+      "type": "string",
+      "description": "UTC timestamp when the policy was authored (ISO 8601)."
+    },
+    "maintained_by": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Name or identifier of the policy maintainer."
+    },
+    "applies_to": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Model or system identifiers this policy targets."
+    }
+  },
+  "additionalProperties": false
+}

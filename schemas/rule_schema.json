@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biasops.dev/schemas/rule/v1",
+  "title": "BiasOps Rule Schema",
+  "description": "JSON Schema for validating individual rule definitions within a policy.",
+  "type": "object",
+  "properties": {},
+  "required": []
+}

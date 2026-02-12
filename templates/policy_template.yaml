@@ -1,0 +1,11 @@
+# policy_template.yaml — Starter template for authoring a new BiasOps policy.
+# Copy this file and fill in the fields to create a custom policy.
+
+metadata:
+  name: ""
+  version: "0.1.0"
+  description: ""
+  author: ""
+  tags: []
+
+rules: []

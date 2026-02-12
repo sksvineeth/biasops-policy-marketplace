@@ -1,0 +1,17 @@
+# custom_policy.yaml — Example of a user-authored policy.
+# Demonstrates how to define custom rules with specific thresholds.
+
+metadata:
+  name: "hiring-fairness"
+  version: "0.1.0"
+  description: "Custom policy for auditing bias in hiring model predictions."
+  author: "example-user"
+  tags: ["hiring", "fairness", "custom"]
+
+rules:
+  - name: "demographic-parity-check"
+    metric: "demographic_parity_difference"
+    operator: "less_than"
+    threshold: 0.1
+    severity: "error"
+    action: "block"

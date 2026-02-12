@@ -1,0 +1,9 @@
+# rule_template.yaml — Starter template for defining a single policy rule.
+# Each rule specifies a metric, a threshold, and an action on violation.
+
+name: ""
+metric: ""
+operator: ""       # e.g., "less_than", "greater_than", "equal"
+threshold: 0.0
+severity: "warning" # warning | error | info
+action: ""          # e.g., "block", "flag", "log"

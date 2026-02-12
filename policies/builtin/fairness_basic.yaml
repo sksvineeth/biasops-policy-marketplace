@@ -1,0 +1,11 @@
+# fairness_basic.yaml — Built-in policy enforcing basic fairness constraints.
+# Ships with BiasOps as a sensible default starting point.
+
+metadata:
+  name: "fairness-basic"
+  version: "1.0.0"
+  description: "Basic fairness policy with demographic parity and equal opportunity checks."
+  author: "biasops"
+  tags: ["fairness", "builtin"]
+
+rules: []
