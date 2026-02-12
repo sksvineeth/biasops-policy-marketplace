@@ -1,0 +1,39 @@
+id: GDPR-ART22-001
+name: GDPR Article 22 - Automated Decision-Making
+version: 1.0.0
+domain: enterprise-compliance
+jurisdiction: EU
+risk_level: CRITICAL
+enforcement_mode: block
+maintained_by: BiasOps Core Team
+applies_to:
+  - credit scoring
+  - hiring
+  - insurance
+  - loan decisions
+  - benefits eligibility
+bias_types_addressed:
+  - automated-decision-making
+  - lack-of-explainability
+  - right-to-contest-violation
+  - data-minimization-breach
+regulation_references:
+  - article: "GDPR Article 22 - Automated individual decision-making"
+    url: "https://gdpr-info.eu/art-22-gdpr/"
+    jurisdiction: EU
+  - article: "GDPR Article 13 - Transparency"
+    url: "https://gdpr-info.eu/art-13-gdpr/"
+    jurisdiction: EU
+policy_logic:
+  human_oversight_present_must_be_true: true
+  explainability_score_min_threshold: 0.65
+  right_to_contest_documented_must_be_true: true
+  data_minimization_compliant_must_be_true: true
+  transparency_notice_provided_must_be_true: true
+remediation_steps:
+  - "Document human oversight process in model card"
+  - "Implement explainability layer (SHAP or LIME) and ensure score >= 0.65"
+  - "Add right-to-contest mechanism in the user-facing application"
+  - "Review data inputs and remove fields not strictly necessary"
+  - "Provide transparency notice to all individuals subject to automated decisions"
+created_at: "2026-02-12T00:00:00Z"

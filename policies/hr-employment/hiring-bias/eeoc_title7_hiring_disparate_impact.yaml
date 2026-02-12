@@ -1,0 +1,43 @@
+id: EEOC-TITLE7-001
+name: EEOC Title VII - Hiring Disparate Impact (80% Rule)
+version: 1.0.0
+domain: hr-employment
+jurisdiction: US
+risk_level: CRITICAL
+enforcement_mode: block
+maintained_by: BiasOps Core Team
+applies_to:
+  - hiring models
+  - resume screening
+  - candidate ranking
+  - interview scheduling
+  - performance review
+bias_types_addressed:
+  - disparate-impact
+  - demographic-proxy
+  - adverse-impact
+  - selection-rate-disparity
+regulation_references:
+  - article: "Title VII Civil Rights Act 1964"
+    url: "https://www.eeoc.gov/statutes/title-vii-civil-rights-act-1964"
+    jurisdiction: US
+  - article: "EEOC Uniform Guidelines on Employee Selection Procedures"
+    url: "https://www.eeoc.gov/laws/guidance/questions-and-answers-clarify-and-provide-common-interpretation-uniform-guidelines"
+    jurisdiction: US
+  - article: "Colorado AI Act - Employment Provisions"
+    url: "https://leg.colorado.gov/bills/sb24-205"
+    jurisdiction: US-CO
+policy_logic:
+  selection_rate_disparity_max_threshold: 0.80
+  demographic_proxy_variables_must_be_false: true
+  adverse_action_documented_must_be_true: true
+  bias_audit_completed_must_be_true: true
+  protected_class_analysis_completed_must_be_true: true
+remediation_steps:
+  - "Conduct adverse impact analysis across all protected classes"
+  - "Remove demographic proxy variables (zip code, name, school)"
+  - "Document adverse action notices for all rejected candidates"
+  - "Commission independent bias audit before next hiring cycle"
+  - "Implement fairness constraints in model training"
+  - "Review job requirements for unnecessary credential inflation"
+created_at: "2026-02-12T00:00:00Z"
