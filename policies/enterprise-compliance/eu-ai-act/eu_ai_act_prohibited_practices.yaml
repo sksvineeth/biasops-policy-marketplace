@@ -1,6 +1,7 @@
 id: EU-AI-ACT-002
-name: EU AI Act - Prohibited AI Practices
-version: 1.0.0
+name: "EU AI Act - Prohibited AI Practices (Effective February 2025)"
+version: 1.1.0
+enforcement_effective_date: "2025-02-02"
 domain: enterprise-compliance
 jurisdiction: EU
 risk_level: CRITICAL
