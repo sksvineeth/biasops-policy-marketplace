@@ -1,6 +1,6 @@
 id: EU-AI-ACT-001
 name: EU AI Act - High Risk AI System Obligations
-version: 1.0.0
+version: 1.1.0
 domain: enterprise-compliance
 jurisdiction: EU
 risk_level: CRITICAL
@@ -43,6 +43,12 @@ regulation_references:
   - article: "EU AI Act Article 15 - Accuracy Robustness Cybersecurity"
     url: "https://artificialintelligenceact.eu/article/15/"
     jurisdiction: EU
+  - article: "EU AI Act Article 12 - Record-Keeping"
+    url: "https://artificialintelligenceact.eu/article/12/"
+    jurisdiction: EU
+  - article: "EU AI Act Article 17 - Quality Management System"
+    url: "https://artificialintelligenceact.eu/article/17/"
+    jurisdiction: EU
   - article: "EU AI Act Annex III - High Risk AI Systems"
     url: "https://artificialintelligenceact.eu/annex/3/"
     jurisdiction: EU
@@ -60,6 +66,9 @@ policy_logic:
   incident_reporting_mechanism_defined_must_be_true: true
   accuracy_score_min_threshold: 0.75
   robustness_score_min_threshold: 0.70
+  automatic_logging_enabled_must_be_true: true
+  quality_management_system_documented_must_be_true: true
+  eu_ai_act_database_registered_must_be_true: true
 remediation_steps:
   - "Establish a risk management system covering the full AI lifecycle per Article 9"
   - "Complete technical documentation per Annex IV covering system description, design, architecture, and training data"

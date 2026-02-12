@@ -9,12 +9,10 @@ import pytest
 
 from biasops.engine import PolicyEngine
 from biasops.models import (
-    EnforcementMode,
     Policy,
     PolicyReport,
     ReportStatus,
     RiskLevel,
-    Violation,
 )
 
 # ---------------------------------------------------------------------------

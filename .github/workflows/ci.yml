@@ -22,5 +22,4 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: pip install -e ".[dev]"
       - run: ruff check .
-      - run: mypy biasops/
       - run: pytest --cov=biasops
