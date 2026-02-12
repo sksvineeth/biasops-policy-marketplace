@@ -12,7 +12,6 @@ from biasops.loader import load_policy
 from biasops.models import (
     EnforcementMode,
     Policy,
-    PolicyReport,
     ReportStatus,
     RiskLevel,
 )

@@ -129,10 +129,10 @@ def run_scan(scenario_name: str):
 
     console.print()
     console.print(Panel.fit(
-        f"[bold blue]BiasOps EU AI Act Compliance Scan[/bold blue]\n"
-        f"[white]Policy: EU-AI-ACT-001 — High Risk System Obligations[/white]\n"
-        f"[white]Regulation: EU AI Act Annex III[/white]\n"
-        f"[white]Enforcement: BLOCK[/white]",
+        "[bold blue]BiasOps EU AI Act Compliance Scan[/bold blue]\n"
+        "[white]Policy: EU-AI-ACT-001 — High Risk System Obligations[/white]\n"
+        "[white]Regulation: EU AI Act Annex III[/white]\n"
+        "[white]Enforcement: BLOCK[/white]",
         box=box.DOUBLE
     ))
 
@@ -242,9 +242,9 @@ def run_scan(scenario_name: str):
 
     console.print()
     console.print(
-        f"[dim]Scan powered by BiasOps Policy Marketplace[/dim]\n"
-        f"[dim]Policy: EU-AI-ACT-001 v1.0.0 | "
-        f"github.com/sksvineeth/biasops-policy-marketplace[/dim]"
+        "[dim]Scan powered by BiasOps Policy Marketplace[/dim]\n"
+        "[dim]Policy: EU-AI-ACT-001 v1.0.0 | "
+        "github.com/sksvineeth/biasops-policy-marketplace[/dim]"
     )
     console.print()
 

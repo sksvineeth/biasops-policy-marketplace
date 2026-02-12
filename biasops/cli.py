@@ -138,9 +138,9 @@ def scan(
 
     # --- print report ---
     if report.status.value == "PASS":
-        console.print(f"\n[bold green]Status: PASS ✓[/bold green]")
+        console.print("\n[bold green]Status: PASS ✓[/bold green]")
     else:
-        console.print(f"\n[bold red]Status: FAIL ✗[/bold red]")
+        console.print("\n[bold red]Status: FAIL ✗[/bold red]")
 
     console.print(f"Policies evaluated: {len(report.policies_evaluated)}")
     console.print(f"Violations found: {len(report.violations)}")
