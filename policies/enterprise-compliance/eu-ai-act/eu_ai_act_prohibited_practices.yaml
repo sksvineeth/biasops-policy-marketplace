@@ -1,0 +1,53 @@
+id: EU-AI-ACT-002
+name: EU AI Act - Prohibited AI Practices
+version: 1.0.0
+domain: enterprise-compliance
+jurisdiction: EU
+risk_level: CRITICAL
+enforcement_mode: block
+maintained_by: BiasOps Core Team
+applies_to:
+  - all AI systems deployed in the EU
+  - consumer-facing AI applications
+  - public sector AI systems
+  - law enforcement AI
+  - social scoring systems
+  - biometric surveillance systems
+bias_types_addressed:
+  - subliminal-manipulation
+  - vulnerability-exploitation
+  - social-scoring
+  - real-time-biometric-surveillance
+  - emotion-recognition-misuse
+  - biometric-categorisation-misuse
+  - predictive-policing-bias
+regulation_references:
+  - article: "EU AI Act Article 5 - Prohibited AI Practices"
+    url: "https://artificialintelligenceact.eu/article/5/"
+    jurisdiction: EU
+  - article: "EU AI Act Recital 42 - Subliminal Techniques"
+    url: "https://artificialintelligenceact.eu/recital/42/"
+    jurisdiction: EU
+  - article: "EU AI Act Recital 44 - Social Scoring"
+    url: "https://artificialintelligenceact.eu/recital/44/"
+    jurisdiction: EU
+policy_logic:
+  subliminal_manipulation_techniques_must_be_false: true
+  vulnerability_exploitation_present_must_be_false: true
+  social_scoring_system_must_be_false: true
+  realtime_biometric_surveillance_public_must_be_false: true
+  emotion_recognition_workplace_school_must_be_false: true
+  biometric_categorisation_sensitive_attributes_must_be_false: true
+  predictive_policing_individual_must_be_false: true
+  facial_recognition_database_scraping_must_be_false: true
+remediation_steps:
+  - "Remove any subliminal or subconscious manipulation techniques from the system per Article 5(1)(a)"
+  - "Eliminate any exploitation of age, disability, or socioeconomic vulnerability per Article 5(1)(b)"
+  - "Discontinue any social scoring of natural persons by public authorities per Article 5(1)(c)"
+  - "Cease real-time remote biometric identification in publicly accessible spaces per Article 5(1)(d)"
+  - "Remove emotion recognition in workplace or educational institution contexts per Article 5(1)(f)"
+  - "Eliminate biometric categorisation inferring sensitive attributes like race, political opinion, or sexual orientation per Article 5(1)(g)"
+  - "Stop predictive policing based solely on profiling or personality trait assessment per Article 5(1)(e)"
+  - "Remove any untargeted facial recognition database scraping per Article 5(1)(h)"
+  - "Conduct immediate legal review — violations of Article 5 carry fines up to EUR 35 million or 7 percent of global turnover"
+created_at: "2026-02-12T00:00:00Z"

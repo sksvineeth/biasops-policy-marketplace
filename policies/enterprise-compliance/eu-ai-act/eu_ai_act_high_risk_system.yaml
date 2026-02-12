@@ -1,0 +1,76 @@
+id: EU-AI-ACT-001
+name: EU AI Act - High Risk AI System Obligations
+version: 1.0.0
+domain: enterprise-compliance
+jurisdiction: EU
+risk_level: CRITICAL
+enforcement_mode: block
+maintained_by: BiasOps Core Team
+applies_to:
+  - credit scoring models
+  - hiring and recruitment AI
+  - educational assessment AI
+  - benefits eligibility systems
+  - law enforcement AI
+  - critical infrastructure AI
+  - biometric identification systems
+  - migration and asylum AI
+  - justice and democratic process AI
+bias_types_addressed:
+  - high-risk-system-non-compliance
+  - lack-of-human-oversight
+  - insufficient-technical-documentation
+  - missing-conformity-assessment
+  - inadequate-transparency
+  - data-governance-failure
+  - accuracy-robustness-failure
+regulation_references:
+  - article: "EU AI Act Article 9 - Risk Management System"
+    url: "https://artificialintelligenceact.eu/article/9/"
+    jurisdiction: EU
+  - article: "EU AI Act Article 10 - Data and Data Governance"
+    url: "https://artificialintelligenceact.eu/article/10/"
+    jurisdiction: EU
+  - article: "EU AI Act Article 11 - Technical Documentation"
+    url: "https://artificialintelligenceact.eu/article/11/"
+    jurisdiction: EU
+  - article: "EU AI Act Article 13 - Transparency and Provision of Information"
+    url: "https://artificialintelligenceact.eu/article/13/"
+    jurisdiction: EU
+  - article: "EU AI Act Article 14 - Human Oversight"
+    url: "https://artificialintelligenceact.eu/article/14/"
+    jurisdiction: EU
+  - article: "EU AI Act Article 15 - Accuracy Robustness Cybersecurity"
+    url: "https://artificialintelligenceact.eu/article/15/"
+    jurisdiction: EU
+  - article: "EU AI Act Annex III - High Risk AI Systems"
+    url: "https://artificialintelligenceact.eu/annex/3/"
+    jurisdiction: EU
+policy_logic:
+  risk_management_system_documented_must_be_true: true
+  technical_documentation_complete_must_be_true: true
+  data_governance_policy_present_must_be_true: true
+  human_oversight_mechanism_defined_must_be_true: true
+  conformity_assessment_completed_must_be_true: true
+  transparency_information_provided_must_be_true: true
+  accuracy_metrics_documented_must_be_true: true
+  robustness_testing_completed_must_be_true: true
+  cybersecurity_measures_implemented_must_be_true: true
+  post_market_monitoring_plan_present_must_be_true: true
+  incident_reporting_mechanism_defined_must_be_true: true
+  accuracy_score_min_threshold: 0.75
+  robustness_score_min_threshold: 0.70
+remediation_steps:
+  - "Establish a risk management system covering the full AI lifecycle per Article 9"
+  - "Complete technical documentation per Annex IV covering system description, design, architecture, and training data"
+  - "Implement data governance policy covering training data quality, relevance, and bias examination per Article 10"
+  - "Define and implement human oversight mechanisms allowing operators to monitor, intervene, and override the system per Article 14"
+  - "Complete conformity assessment before market placement per Article 43"
+  - "Provide transparency documentation to deployers covering capabilities, limitations, and intended purpose per Article 13"
+  - "Document accuracy metrics across all relevant dimensions and population groups per Article 15"
+  - "Conduct robustness testing against adversarial inputs and edge cases"
+  - "Implement cybersecurity measures protecting against unauthorized access and data poisoning"
+  - "Establish post-market monitoring plan to track real-world performance per Article 72"
+  - "Define incident reporting mechanism to notify authorities of serious incidents per Article 73"
+  - "Register system in EU AI Act database before deployment per Article 71"
+created_at: "2026-02-12T00:00:00Z"
