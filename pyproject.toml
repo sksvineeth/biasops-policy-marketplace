@@ -1,6 +1,6 @@
 [build-system]
 requires = ["setuptools>=68.0", "wheel"]
-build-backend = "setuptools.backends._legacy:_Backend"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "biasops-policy-marketplace"
@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "A policy-as-code marketplace for defining, validating, and enforcing bias-detection policies."
 readme = "README.md"
 license = {text = "MIT"}
-requires-python = ">=3.10"
+requires-python = ">=3.9"
 dependencies = [
     "pydantic>=2.0",
     "jsonschema>=4.20",
@@ -31,6 +31,9 @@ dev = [
 
 [project.scripts]
 biasops = "biasops.cli:app"
+
+[tool.setuptools.packages.find]
+include = ["biasops*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
