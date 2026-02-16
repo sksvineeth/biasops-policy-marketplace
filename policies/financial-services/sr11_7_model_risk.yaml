@@ -1,0 +1,117 @@
+# ─────────────────────────────────────────────
+# BiasOps Policy File
+# ─────────────────────────────────────────────
+
+id: SR11-7-001
+name: SR 11-7 Model Risk Management
+version: 1.0.0
+domain: financial-services
+jurisdiction: US
+
+risk_level: HIGH
+enforcement_mode: warn
+
+maintained_by: BiasOps Community
+last_reviewed: "2026-02-16"
+
+description: >
+  Evaluates AI/ML model governance practices against OCC/Federal Reserve SR 11-7
+  Supervisory Guidance on Model Risk Management. Checks for model documentation
+  completeness, independent validation evidence, ongoing monitoring plans, and
+  change management controls. Required for all models used in banking decisions.
+
+applies_to:
+  - all models used in banking decisions
+  - credit risk models
+  - market risk models
+  - fraud detection models
+  - AML/BSA models
+  - any model subject to bank examination
+
+bias_types_addressed:
+  - governance-gap
+  - documentation-deficit
+  - validation-absence
+  - monitoring-gap
+
+regulation_references:
+  - article: "OCC/Fed SR 11-7 Supervisory Guidance on Model Risk Management"
+    url: "https://www.federalreserve.gov/supervisionreg/srletters/sr1107.htm"
+    jurisdiction: US
+  - article: "OCC Bulletin 2011-12 — Sound Practices for Model Risk Management"
+    url: "https://www.occ.gov/news-issuances/bulletins/2011/bulletin-2011-12.html"
+    jurisdiction: US
+
+policy_logic:
+  # Model documentation completeness score (0-1)
+  model_documentation_completeness_min_threshold: 0.80
+  
+  # Independent validation must be performed
+  independent_validation_performed_must_be_true: true
+  
+  # Ongoing monitoring plan must exist
+  monitoring_plan_documented_must_be_true: true
+  
+  # Change management controls in place
+  change_management_documented_must_be_true: true
+
+checks:
+  - name: "Model Documentation Completeness"
+    description: "Model card must include: purpose, methodology, assumptions, limitations, performance metrics, data sources"
+    metric: "model_documentation_score"
+    threshold_type: "min"
+    threshold_value: 0.80
+    failure_severity: "HIGH"
+    required_sections:
+      - model_purpose
+      - methodology_description
+      - key_assumptions
+      - known_limitations
+      - performance_metrics
+      - training_data_sources
+      - intended_use
+      - out_of_scope_uses
+
+  - name: "Independent Validation"
+    description: "Model must have been validated by a party independent of the development team"
+    metric: "independent_validation_performed"
+    threshold_type: "must_be_true"
+    threshold_value: true
+    failure_severity: "HIGH"
+
+  - name: "Ongoing Monitoring Plan"
+    description: "Documented plan for ongoing model performance monitoring with defined triggers for review"
+    metric: "monitoring_plan_documented"
+    threshold_type: "must_be_true"
+    threshold_value: true
+    failure_severity: "MEDIUM"
+
+  - name: "Change Management Controls"
+    description: "Documented change management process including approval workflows and version control"
+    metric: "change_management_documented"
+    threshold_type: "must_be_true"
+    threshold_value: true
+    failure_severity: "MEDIUM"
+
+  - name: "Model Inventory Registration"
+    description: "Model must be registered in the enterprise model inventory with assigned risk tier"
+    metric: "model_inventory_registered"
+    threshold_type: "must_be_true"
+    threshold_value: true
+    failure_severity: "HIGH"
+
+remediation_steps:
+  - "Step 1: Complete model card with all required sections (purpose, methodology, assumptions, limitations, metrics, data sources)"
+  - "Step 2: Schedule independent model validation with qualified internal or external team"
+  - "Step 3: Create ongoing monitoring plan specifying metrics, frequency, and escalation triggers"
+  - "Step 4: Document change management process with approval chain and version control requirements"
+  - "Step 5: Register model in enterprise model inventory with appropriate risk tier classification"
+  - "Step 6: Schedule periodic model review per SR 11-7 requirements (at least annually)"
+
+limitations:
+  - "Documentation completeness is assessed by field presence, not content quality"
+  - "Independent validation check verifies documentation, not the quality of the validation itself"
+  - "This policy supplements but does not replace bank examination procedures"
+  - "Consult your institution's model risk management framework for specific requirements"
+
+created_at: "2026-02-16T00:00:00Z"

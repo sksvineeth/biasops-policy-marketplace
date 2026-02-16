@@ -1,0 +1,130 @@
+# ─────────────────────────────────────────────
+# BiasOps Policy File
+# ─────────────────────────────────────────────
+
+id: FHA-001
+name: Fair Housing Act Credit Scoring Fairness
+version: 1.0.0
+domain: financial-services
+jurisdiction: US
+
+risk_level: CRITICAL
+enforcement_mode: block
+
+maintained_by: BiasOps Community
+last_reviewed: "2026-02-16"
+
+description: >
+  Detects potential Fair Housing Act violations in AI-driven mortgage and housing-related
+  credit decisions. Checks for prohibited proxy variable usage (e.g., ZIP code as race proxy),
+  geographic redlining patterns, mortgage approval rate parity across demographics, and
+  feature importance audits for correlations with protected class membership.
+
+applies_to:
+  - mortgage lending models
+  - home equity lending models
+  - property valuation models
+  - automated underwriting systems for housing credit
+  - tenant screening models
+
+protected_classes:
+  - race
+  - color
+  - national_origin
+  - religion
+  - sex
+  - familial_status
+  - disability
+
+bias_types_addressed:
+  - proxy-discrimination
+  - geographic-redlining
+  - approval-rate-disparity
+  - feature-correlation-bias
+
+regulation_references:
+  - article: "Fair Housing Act (42 U.S.C. § 3601-3619)"
+    url: "https://www.law.cornell.edu/uscode/text/42/chapter-45"
+    jurisdiction: US
+  - article: "HUD Discriminatory Effects Rule (24 CFR § 100.500)"
+    url: "https://www.law.cornell.edu/cfr/text/24/section-100.500"
+    jurisdiction: US
+  - article: "CFPB Fair Lending Examination Procedures"
+    url: "https://www.consumerfinance.gov/compliance/supervisory-guidance/"
+    jurisdiction: US
+  - article: "CFPB Rule on Automated Valuation Models"
+    url: "https://www.consumerfinance.gov/about-us/blog/cfpb-approves-rule-to-ensure-accuracy-and-accountability-in-the-use-of-ai-and-algorithms-in-home-appraisals/"
+    jurisdiction: US
+
+policy_logic:
+  # Proxy variable detection: correlation between features and protected classes
+  # Correlation > 0.50 indicates potential proxy
+  proxy_correlation_max_threshold: 0.50
+  
+  # Mortgage approval rate parity (similar to 4/5ths rule)
+  approval_rate_parity_min_threshold: 0.80
+  
+  # Geographic lending equity (lending across minority/non-minority tracts)
+  geographic_equity_index_min_threshold: 0.65
+  
+  # Feature importance audit: no single protected-correlated feature > 15% importance
+  protected_feature_importance_max_threshold: 0.15
+
+checks:
+  - name: "Proxy Variable Detection"
+    description: "No model feature should correlate > 0.50 with protected class membership (e.g., ZIP code → race)"
+    metric: "max_proxy_correlation"
+    threshold_type: "max"
+    threshold_value: 0.50
+    failure_severity: "CRITICAL"
+    common_proxies:
+      - zip_code
+      - neighborhood
+      - school_district
+      - language_preference
+      - surname
+
+  - name: "Mortgage Approval Rate Parity"
+    description: "Approval rate for any protected group must be ≥ 80% of the highest group's rate"
+    metric: "min_approval_rate_ratio"
+    threshold_type: "min"
+    threshold_value: 0.80
+    failure_severity: "CRITICAL"
+
+  - name: "Geographic Redlining Screen"
+    description: "Lending activity must not be disproportionately concentrated in non-minority census tracts"
+    metric: "geographic_equity_index"
+    threshold_type: "min"
+    threshold_value: 0.65
+    failure_severity: "HIGH"
+
+  - name: "Feature Importance Audit"
+    description: "No feature correlated with protected classes should account for > 15% of model importance"
+    metric: "max_protected_feature_importance"
+    threshold_type: "max"
+    threshold_value: 0.15
+    failure_severity: "HIGH"
+
+  - name: "Steering Pattern Detection"
+    description: "Model recommendations must not systematically steer protected groups to less favorable products"
+    metric: "steering_disparity_score"
+    threshold_type: "max"
+    threshold_value: 0.10
+    failure_severity: "CRITICAL"
+
+remediation_steps:
+  - "Step 1: Run correlation analysis between all model features and protected class columns"
+  - "Step 2: For features with correlation > 0.50, evaluate whether removal degrades model performance significantly"
+  - "Step 3: If proxy feature is critical, implement bias mitigation (reweighting, adversarial debiasing)"
+  - "Step 4: Map lending activity by census tract and compare to demographic composition"
+  - "Step 5: Run SHAP feature importance and flag any protected-correlated feature > 15% importance"
+  - "Step 6: Document all findings and remediation actions for fair lending examination file"
+
+limitations:
+  - "Proxy detection uses statistical correlation which may flag benign features — human review required"
+  - "Geographic analysis requires census tract demographic data not included in model data"
+  - "Feature importance thresholds are screening levels, not legal bright lines"
+  - "Steering detection requires product-level data (rates, terms) beyond basic approval/denial"
+  - "Consult qualified legal counsel for Fair Housing Act compliance determinations"
+
+created_at: "2026-02-16T00:00:00Z"

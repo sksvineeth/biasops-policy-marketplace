@@ -1,0 +1,107 @@
+# ─────────────────────────────────────────────
+# BiasOps Policy File
+# ─────────────────────────────────────────────
+
+id: CFPB-AAR-001
+name: CFPB Adverse Action Notice Requirements
+version: 1.0.0
+domain: financial-services
+jurisdiction: US
+
+risk_level: CRITICAL
+enforcement_mode: block
+
+maintained_by: BiasOps Community
+last_reviewed: "2026-02-16"
+
+description: >
+  Validates that AI-driven credit decision models produce specific, individualized
+  adverse action reasons as required by CFPB Circular 2023-03. Models cannot rely on
+  generic denial buckets — each adverse action must map to specific factors in the
+  applicant's actual financial behavior. This is especially critical for models using
+  alternative data or complex algorithms.
+
+applies_to:
+  - credit scoring models
+  - loan approval models
+  - credit limit models
+  - automated underwriting systems
+  - any model producing credit denial decisions
+
+bias_types_addressed:
+  - explainability-deficit
+  - generic-denial-reasons
+  - black-box-decisions
+
+regulation_references:
+  - article: "CFPB Circular 2023-03 — Adverse action notification requirements"
+    url: "https://www.consumerfinance.gov/compliance/circulars/circular-2023-03-adverse-action-notification-requirements-and-the-proper-use-of-the-cfpbs-sample-forms-provided-in-regulation-b/"
+    jurisdiction: US
+  - article: "Equal Credit Opportunity Act — Adverse Action (15 U.S.C. § 1691(d))"
+    url: "https://www.law.cornell.edu/uscode/text/15/1691"
+    jurisdiction: US
+  - article: "Regulation B — Adverse Action Notices (12 CFR § 1002.9)"
+    url: "https://www.law.cornell.edu/cfr/text/12/section-1002.9"
+    jurisdiction: US
+  - article: "Fair Credit Reporting Act — Adverse Action (15 U.S.C. § 1681m)"
+    url: "https://www.law.cornell.edu/uscode/text/15/1681m"
+    jurisdiction: US
+
+policy_logic:
+  # Reason code specificity: model must produce specific reasons, not generic buckets
+  # Score 0-1 where 1 = fully specific, 0 = entirely generic
+  reason_code_specificity_min_threshold: 0.70
+  
+  # Model must be able to produce at least 4 specific reasons per denial
+  min_reason_codes_per_denial_min_threshold: 4
+  
+  # Reason codes must map to actual model features (not post-hoc rationalizations)
+  reason_feature_alignment_min_threshold: 0.80
+  
+  # Explainability score (SHAP/LIME coverage)
+  explainability_coverage_min_threshold: 0.65
+
+checks:
+  - name: "Reason Code Specificity"
+    description: "Adverse action reasons must be specific to applicant behavior, not generic buckets per CFPB 2023-03"
+    metric: "reason_code_specificity_score"
+    threshold_type: "min"
+    threshold_value: 0.70
+    failure_severity: "CRITICAL"
+
+  - name: "Minimum Reason Codes Per Denial"
+    description: "Model must produce at least 4 specific adverse action reasons per denied application"
+    metric: "avg_reason_codes_per_denial"
+    threshold_type: "min"
+    threshold_value: 4
+    failure_severity: "HIGH"
+
+  - name: "Reason-Feature Alignment"
+    description: "Stated denial reasons must correspond to actual model features used in the decision"
+    metric: "reason_feature_alignment_score"
+    threshold_type: "min"
+    threshold_value: 0.80
+    failure_severity: "CRITICAL"
+
+  - name: "Model Explainability Coverage"
+    description: "SHAP or LIME explanations must cover ≥ 65% of model decision variance"
+    metric: "explainability_coverage_score"
+    threshold_type: "min"
+    threshold_value: 0.65
+    failure_severity: "HIGH"
+
+remediation_steps:
+  - "Step 1: Audit current reason codes — replace generic buckets (e.g., 'credit history') with specific factors (e.g., '3 late payments over 60 days in past 12 months')"
+  - "Step 2: Implement SHAP or LIME to generate per-applicant feature importance scores"
+  - "Step 3: Map top contributing features to human-readable adverse action reason codes"
+  - "Step 4: Validate that each denial produces at least 4 specific, accurate reasons"
+  - "Step 5: Test adverse action notices against CFPB sample scenarios for specificity"
+  - "Step 6: Document the reason code generation methodology for regulatory examination"
+
+limitations:
+  - "Specificity scoring is based on heuristic analysis of reason code text granularity"
+  - "Explainability coverage depends on SHAP/LIME implementation quality"
+  - "This policy checks model capability to produce reasons — not the delivery mechanism to consumers"
+  - "Consult qualified legal counsel for adverse action notice compliance"
+
+created_at: "2026-02-16T00:00:00Z"

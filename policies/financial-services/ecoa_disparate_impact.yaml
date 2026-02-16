@@ -1,0 +1,128 @@
+# ─────────────────────────────────────────────
+# BiasOps Policy File
+# ─────────────────────────────────────────────
+
+id: ECOA-001
+name: ECOA Fair Lending Disparate Impact
+version: 1.0.0
+domain: financial-services
+jurisdiction: US
+
+risk_level: CRITICAL
+enforcement_mode: block
+
+maintained_by: BiasOps Community
+last_reviewed: "2026-02-16"
+
+description: >
+  Evaluates AI-driven credit decisions for disparate impact across protected classes
+  under the Equal Credit Opportunity Act (ECOA) and Regulation B. Uses the four-fifths
+  (80%) rule as the primary screening threshold, consistent with EEOC Uniform Guidelines
+  adopted by federal financial regulators for fair lending analysis.
+
+applies_to:
+  - credit scoring models
+  - loan approval models
+  - credit limit models
+  - automated underwriting systems
+
+protected_classes:
+  - race
+  - sex
+  - age
+  - national_origin
+
+bias_types_addressed:
+  - disparate-impact
+  - selection-rate-disparity
+  - demographic-proxy
+
+regulation_references:
+  - article: "Equal Credit Opportunity Act (15 U.S.C. § 1691)"
+    url: "https://www.law.cornell.edu/uscode/text/15/1691"
+    jurisdiction: US
+  - article: "Regulation B (12 CFR Part 1002)"
+    url: "https://www.law.cornell.edu/cfr/text/12/part-1002"
+    jurisdiction: US
+  - article: "EEOC Uniform Guidelines on Employee Selection Procedures (29 CFR § 1607.4)"
+    url: "https://www.law.cornell.edu/cfr/text/29/1607.4"
+    jurisdiction: US
+  - article: "CFPB ECOA Examination Procedures"
+    url: "https://files.consumerfinance.gov/f/201306_cfpb_laws-and-regulations_ecoa-combined-june-2013.pdf"
+    jurisdiction: US
+
+# ─────────────────────────────────────────────
+# Policy Logic
+# ─────────────────────────────────────────────
+# The four-fifths rule: selection rate for any protected group must be
+# at least 80% of the rate for the group with the highest selection rate.
+# See 29 CFR § 1607.4(D).
+
+policy_logic:
+  # Core disparate impact check
+  adverse_impact_ratio_min_threshold: 0.80
+  
+  # Statistical significance check (p-value from chi-squared test)
+  # If p > 0.05, disparity is not statistically significant
+  statistical_significance_max_threshold: 0.05
+  
+  # Demographic proxy detection
+  # Model features must not serve as proxies for protected classes
+  demographic_proxy_variables_must_be_false: true
+  
+  # Less Discriminatory Alternative documentation
+  # Must document search for less discriminatory alternatives per Reg B
+  lda_search_documented_must_be_true: true
+
+checks:
+  - name: "Adverse Impact Ratio — Race"
+    description: "Selection rate ratio between lowest and highest racial group must be ≥ 0.80"
+    metric: "adverse_impact_ratio_race"
+    threshold_type: "min"
+    threshold_value: 0.80
+    failure_severity: "CRITICAL"
+    
+  - name: "Adverse Impact Ratio — Sex"
+    description: "Selection rate ratio between male and female applicants must be ≥ 0.80"
+    metric: "adverse_impact_ratio_sex"
+    threshold_type: "min"
+    threshold_value: 0.80
+    failure_severity: "CRITICAL"
+    
+  - name: "Adverse Impact Ratio — Age"
+    description: "Selection rate ratio across age groups (40+ vs under 40) must be ≥ 0.80"
+    metric: "adverse_impact_ratio_age"
+    threshold_type: "min"
+    threshold_value: 0.80
+    failure_severity: "HIGH"
+    
+  - name: "Statistical Significance Test"
+    description: "Chi-squared test p-value for approval rate differences across protected classes"
+    metric: "chi_squared_p_value"
+    threshold_type: "significance"
+    threshold_value: 0.05
+    failure_severity: "HIGH"
+    
+  - name: "Proxy Variable Detection"
+    description: "No model features should serve as proxies for protected class membership"
+    metric: "proxy_variables_detected"
+    threshold_type: "must_be_false"
+    threshold_value: false
+    failure_severity: "CRITICAL"
+
+remediation_steps:
+  - "Step 1: Identify which protected classes fail the 4/5ths threshold by computing selection rates per group"
+  - "Step 2: Analyze model features for proxy variables (e.g., ZIP code correlating with race)"
+  - "Step 3: Document search for Less Discriminatory Alternatives (LDA) per Regulation B"
+  - "Step 4: If LDA exists, implement it and re-run analysis"
+  - "Step 5: If no LDA exists, document business necessity justification"
+  - "Step 6: Submit updated analysis to compliance team for review before model deployment"
+
+limitations:
+  - "The 4/5ths rule is a screening tool, not a legal determination of discrimination"
+  - "Small sample sizes may produce unreliable ratios — ensure n ≥ 30 per group"
+  - "Statistical significance tests complement but do not replace the 4/5ths rule"
+  - "This policy does not assess disparate treatment (intentional discrimination)"
+  - "Consult qualified legal counsel for compliance determinations"
+
+created_at: "2026-02-16T00:00:00Z"

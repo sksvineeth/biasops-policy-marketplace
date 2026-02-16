@@ -1,0 +1,113 @@
+# ─────────────────────────────────────────────
+# BiasOps Policy File
+# ─────────────────────────────────────────────
+
+id: HMDA-001
+name: HMDA Reporting Data Compliance
+version: 1.0.0
+domain: financial-services
+jurisdiction: US
+
+risk_level: CRITICAL
+enforcement_mode: block
+
+maintained_by: BiasOps Community
+last_reviewed: "2026-02-16"
+
+description: >
+  Validates that mortgage and credit model datasets meet Home Mortgage Disclosure Act
+  (HMDA) reporting requirements. Checks data completeness for required fields, validates
+  denial rate disparities across demographic groups, and screens for geographic lending
+  patterns that may indicate redlining.
+
+applies_to:
+  - mortgage lending models
+  - home equity lending models
+  - credit scoring models for housing-related credit
+
+protected_classes:
+  - race
+  - ethnicity
+  - sex
+  - income_level
+
+bias_types_addressed:
+  - data-completeness
+  - denial-rate-disparity
+  - geographic-redlining
+
+regulation_references:
+  - article: "Home Mortgage Disclosure Act (12 U.S.C. § 2801)"
+    url: "https://www.law.cornell.edu/uscode/text/12/chapter-29"
+    jurisdiction: US
+  - article: "Regulation C (12 CFR Part 1003)"
+    url: "https://www.law.cornell.edu/cfr/text/12/part-1003"
+    jurisdiction: US
+  - article: "CFPB HMDA Filing Instructions Guide"
+    url: "https://www.consumerfinance.gov/data-research/hmda/"
+    jurisdiction: US
+
+policy_logic:
+  # Data completeness: required HMDA fields must be present
+  hmda_field_completeness_min_threshold: 0.95
+  
+  # Denial rate disparity across race/ethnicity
+  denial_rate_disparity_max_threshold: 2.0
+  
+  # Geographic concentration index (Herfindahl-style)
+  # High concentration in non-minority areas may indicate redlining
+  geographic_lending_equity_min_threshold: 0.60
+
+checks:
+  - name: "HMDA Field Completeness"
+    description: "Required HMDA fields (action_taken, loan_purpose, property_type, race, sex, income) must be ≥ 95% complete"
+    metric: "hmda_field_completeness"
+    threshold_type: "min"
+    threshold_value: 0.95
+    failure_severity: "CRITICAL"
+    required_fields:
+      - action_taken
+      - loan_purpose
+      - loan_amount
+      - property_type
+      - race
+      - ethnicity
+      - sex
+      - income
+      - denial_reason
+
+  - name: "Denial Rate Disparity Ratio"
+    description: "Ratio of highest to lowest group denial rate must not exceed 2.0x"
+    metric: "denial_rate_disparity_ratio"
+    threshold_type: "max"
+    threshold_value: 2.0
+    failure_severity: "HIGH"
+
+  - name: "Geographic Lending Distribution"
+    description: "Lending must not be concentrated exclusively in non-minority census tracts"
+    metric: "geographic_lending_equity_index"
+    threshold_type: "min"
+    threshold_value: 0.60
+    failure_severity: "HIGH"
+
+  - name: "Income Documentation Rate"
+    description: "Income must be documented for ≥ 90% of applications to prevent steering"
+    metric: "income_documentation_rate"
+    threshold_type: "min"
+    threshold_value: 0.90
+    failure_severity: "MEDIUM"
+
+remediation_steps:
+  - "Step 1: Run HMDA data quality report to identify missing fields per column"
+  - "Step 2: For completeness failures, trace missing data to origination system and fix collection"
+  - "Step 3: For denial rate disparities, cross-reference with ECOA disparate impact analysis"
+  - "Step 4: For geographic concentration, map lending activity by census tract demographics"
+  - "Step 5: Document findings in annual HMDA submission package for regulator review"
+
+limitations:
+  - "Field completeness check validates presence, not accuracy of reported values"
+  - "Geographic analysis requires census tract demographic data for full redlining assessment"
+  - "Denial rate disparity is a screening metric — investigate root causes before concluding bias"
+  - "Consult qualified legal counsel for HMDA compliance determinations"
+
+created_at: "2026-02-16T00:00:00Z"
