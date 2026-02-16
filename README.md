@@ -453,9 +453,7 @@ Apache 2.0 — free to use, modify, and distribute in both commercial and open-s
 
 **Vineeth Reddy** — Principal ML Engineer, AI Governance Researcher
 
-7+ years building enterprise AI systems. Led anomaly detection platforms documenting $50M+ in risk avoidance. IEEE Senior Member Candidate. Speaker at MLWeek 2026 on AI governance topics. Accepted into SCSP AI+Space program. AI advisor to educational institutions.
-
-BiasOps is the open-source foundation of a larger AI governance platform focused on making compliance infrastructure as robust and community-driven as software infrastructure.
+7+ years building enterprise AI systems. BiasOps is the open-source foundation of a larger AI governance platform focused on making compliance infrastructure as robust and community-driven as software infrastructure.
 
 If you are building compliance infrastructure for regulated industries and want to collaborate, open an issue or reach out directly.
 
