@@ -345,6 +345,7 @@ jobs:
 ---
 
 ## Architecture
+
 biasops-policy-marketplace/
 │
 ├── biasops/                    Core Python package
