@@ -201,7 +201,7 @@ BiasOps is a central, growing library of executable compliance policies organize
 | ID | Policy | Regulation | Jurisdiction | Risk | Status |
 |---|---|---|---|---|---|
 | ECOA-001 | Fair Lending Disparate Impact | ECOA / Reg B | US | CRITICAL | ✅ Active |
-| FHA-001 | Credit Scoring Fairness | Fair Housing Act | US | CRITICAL | 🔜 Coming |
+| FHA-001 | Credit Scoring Fairness | Fair Housing Act | US | CRITICAL | ✅ Active |
 | CFPB-001 | Adverse Action Notice Requirements | CFPB Guidelines | US | HIGH | 🔜 Coming |
 | SEC-AI-001 | Investment Model Risk | SEC AI Guidance | US | HIGH | 🔜 Coming |
 | AML-001 | Transaction Monitoring Bias | BSA / FinCEN | US | HIGH | 🔜 Coming |
