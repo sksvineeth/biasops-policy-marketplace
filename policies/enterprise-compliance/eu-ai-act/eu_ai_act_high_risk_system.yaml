@@ -58,8 +58,9 @@ regulation_references:
   - article: "EU AI Act Article 10 Para 2f - Training Data Bias"
     url: "https://artificialintelligenceact.eu/article/10/"
     jurisdiction: EU
-  - benchmark_source: "COMPL-AI: Benchmarking the EU AI Act (ETH Zurich / LatticeFlow AI)"
+  - article: "COMPL-AI: Benchmarking the EU AI Act (ETH Zurich / LatticeFlow AI)"
     url: "https://arxiv.org/abs/2410.07959"
+    jurisdiction: EU
 policy_logic:
   risk_management_system_documented_must_be_true: true
   technical_documentation_complete_must_be_true: true

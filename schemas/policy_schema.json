@@ -108,6 +108,10 @@
       "type": "array",
       "items": { "type": "string" },
       "description": "Model or system identifiers this policy targets."
+    },
+    "bias_monitoring": {
+      "type": "object",
+      "description": "Bias monitoring configuration including frequency, attributes, metrics, and benchmarks."
     }
   },
   "additionalProperties": false

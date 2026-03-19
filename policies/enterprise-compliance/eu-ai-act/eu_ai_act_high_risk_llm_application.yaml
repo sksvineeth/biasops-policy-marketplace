@@ -35,8 +35,9 @@ regulation_references:
   - article: "EU AI Act Recital 75 - Prevention of Harmful Behaviour"
     url: "https://artificialintelligenceact.eu/recital/75/"
     jurisdiction: EU
-  - benchmark_source: "COMPL-AI: Benchmarking the EU AI Act (ETH Zurich / LatticeFlow AI)"
+  - article: "COMPL-AI: Benchmarking the EU AI Act (ETH Zurich / LatticeFlow AI)"
     url: "https://arxiv.org/abs/2410.07959"
+    jurisdiction: EU
 policy_logic:
   risk_management_system_documented_must_be_true: true
   human_oversight_mechanism_implemented_must_be_true: true

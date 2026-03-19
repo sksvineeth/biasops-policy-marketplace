@@ -85,7 +85,7 @@ class TestPolicyFileLoading:
         policy = load_policy(_EU_AI_ACT_HIGH_RISK)
         assert policy.id == "EU-AI-ACT-001"
         assert policy.name == "EU AI Act - High Risk AI System Obligations"
-        assert policy.version == "1.1.0"
+        assert policy.version == "1.2.0"
         assert policy.domain == "enterprise-compliance"
         assert policy.jurisdiction == "EU"
         assert policy.risk_level == RiskLevel.CRITICAL
