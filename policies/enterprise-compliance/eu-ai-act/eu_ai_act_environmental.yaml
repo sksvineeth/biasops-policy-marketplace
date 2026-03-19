@@ -1,0 +1,35 @@
+id: EU-AI-ACT-005
+name: EU AI Act - Environmental Impact and Sustainability Obligations
+version: 1.0.0
+domain: enterprise-compliance
+jurisdiction: EU
+risk_level: MEDIUM
+enforcement_mode: warn
+maintained_by: BiasOps Core Team
+applies_to:
+  - all AI system providers (GP and HR)
+  - model training operations above threshold compute
+  - cloud-deployed AI systems in regulated industries
+regulation_references:
+  - article: "EU AI Act Article 40 Para 2 - Environmental Standards"
+    url: "https://artificialintelligenceact.eu/article/40/"
+    jurisdiction: EU
+  - article: "EU AI Act Article 95 Para 2 - Codes of Conduct for Environmental Impact"
+    url: "https://artificialintelligenceact.eu/article/95/"
+    jurisdiction: EU
+  - article: "EU AI Act Annex XI Para 2d/2e - Compute and Energy Documentation"
+    url: "https://artificialintelligenceact.eu/annex/11/"
+    jurisdiction: EU
+policy_logic:
+  training_compute_resources_documented_must_be_true: true
+  energy_consumption_estimated_must_be_true: true
+  carbon_footprint_calculated_must_be_true: true
+  energy_efficient_training_techniques_documented_must_be_true: true
+  inference_energy_cost_estimated_must_be_true: true
+remediation_steps:
+  - "Document total compute used in training (GPU/TPU hours, instance type) per Annex XI Para 2d"
+  - "Estimate energy consumption in kWh using ML CO2 Impact calculator or equivalent per Annex XI Para 2e"
+  - "Calculate carbon footprint based on cloud region energy mix"
+  - "Document energy-efficient techniques used (mixed precision, distillation, pruning) per Article 95"
+  - "Include inference-time energy estimates for production deployment"
+created_at: "2026-03-18T00:00:00Z"
