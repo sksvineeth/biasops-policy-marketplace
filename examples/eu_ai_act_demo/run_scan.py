@@ -32,6 +32,10 @@ SCENARIOS = {
     "partial": {
         "file": "partial_compliant_model.json",
         "description": "AutoLend AI v2.1 — Partial compliance, missing human oversight and conformity assessment"
+    },
+    "llm_partial": {
+        "file": "llm_partial_model.json",
+        "description": "NordBank Loan Copilot v1.0 — LLM-powered loan assistant with untested demographic parity and missing adverse decision explanations"
     }
 }
 
@@ -101,6 +105,18 @@ EU_AI_ACT_CHECKS = [
         "article": "Article 73",
         "requirement": "Incident reporting mechanism defined",
         "remediation": "Define mechanism to notify authorities of serious incidents"
+    },
+    {
+        "field": "training_data_bias_assessment_completed",
+        "article": "Article 10 Para 2f",
+        "requirement": "Training data bias assessment completed",
+        "remediation": "Conduct bias examination of training data per Article 10 Para 2f"
+    },
+    {
+        "field": "ai_disclosure_mechanism_implemented",
+        "article": "Article 50 Para 1",
+        "requirement": "AI disclosure mechanism implemented",
+        "remediation": "Display clear AI disclosure at point of user interaction"
     },
 ]
 
@@ -255,7 +271,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--scenario",
-        choices=["compliant", "non_compliant", "partial"],
+        choices=["compliant", "non_compliant", "partial", "llm_partial"],
         default="non_compliant",
         help="Which scenario to run"
     )

@@ -1,0 +1,23 @@
+{
+  "model_id": "nordbank-loan-copilot-v1.0",
+  "model_name": "NordBank Loan Copilot",
+  "model_type": "LLM-Powered Application (GPT-4 wrapper)",
+  "version": "1.0.0",
+  "deployer": "NordBank AG",
+  "deployment_region": "EU",
+  "decision_type": "loan_explanation_and_recommendation",
+  "decision_impact": "significant",
+
+  "_comment_llm": "EU AI Act High Risk LLM Application fields (EU-AI-ACT-003)",
+  "risk_management_system_documented": true,
+  "human_oversight_mechanism_defined": true,
+  "technical_documentation_complete": true,
+  "automatic_logging_enabled": true,
+  "output_consistency_tested": false,
+  "demographic_parity_in_llm_outputs_tested": false,
+  "explanation_provided_on_adverse_decision": false,
+  "ai_disclosure_in_user_interface": true,
+  "prompt_injection_tested_if_user_input_accepted": false,
+  "hallucination_rate_within_threshold": false,
+  "agentic_decision_audit_trail": true
+}
