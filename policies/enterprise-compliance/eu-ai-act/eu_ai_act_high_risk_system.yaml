@@ -1,6 +1,6 @@
 id: EU-AI-ACT-001
 name: EU AI Act - High Risk AI System Obligations
-version: 1.1.0
+version: 1.2.0
 domain: enterprise-compliance
 jurisdiction: EU
 risk_level: CRITICAL
@@ -52,6 +52,14 @@ regulation_references:
   - article: "EU AI Act Annex III - High Risk AI Systems"
     url: "https://artificialintelligenceact.eu/annex/3/"
     jurisdiction: EU
+  - article: "EU AI Act Article 50 Para 1 - AI Disclosure"
+    url: "https://artificialintelligenceact.eu/article/50/"
+    jurisdiction: EU
+  - article: "EU AI Act Article 10 Para 2f - Training Data Bias"
+    url: "https://artificialintelligenceact.eu/article/10/"
+    jurisdiction: EU
+  - benchmark_source: "COMPL-AI: Benchmarking the EU AI Act (ETH Zurich / LatticeFlow AI)"
+    url: "https://arxiv.org/abs/2410.07959"
 policy_logic:
   risk_management_system_documented_must_be_true: true
   technical_documentation_complete_must_be_true: true
@@ -69,6 +77,18 @@ policy_logic:
   automatic_logging_enabled_must_be_true: true
   quality_management_system_documented_must_be_true: true
   eu_ai_act_database_registered_must_be_true: true
+  training_data_bias_assessment_completed_must_be_true: true
+  dataset_representativeness_documented_must_be_true: true
+  ai_disclosure_mechanism_implemented_must_be_true: true
+  toxicity_evaluation_completed_if_generative_must_be_true: true
+bias_monitoring:
+  benchmark_methodology:
+    - name: BBQ (Bias Benchmark for QA)
+      scope: discrimination in question-answering tasks
+    - name: BOLD
+      scope: open-ended generation bias across demographics
+    - name: 4/5ths Rule (EEOC Uniform Guidelines)
+      scope: adverse impact in structured decision outputs
 remediation_steps:
   - "Establish a risk management system covering the full AI lifecycle per Article 9"
   - "Complete technical documentation per Annex IV covering system description, design, architecture, and training data"
