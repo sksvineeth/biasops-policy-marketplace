@@ -1,0 +1,41 @@
+id: EU-AI-ACT-004
+name: EU AI Act - General Purpose AI Model Obligations
+version: 1.0.0
+domain: enterprise-compliance
+jurisdiction: EU
+risk_level: HIGH
+enforcement_mode: warn
+maintained_by: BiasOps Core Team
+applies_to:
+  - foundation model providers
+  - GPAI model developers publishing models for downstream use
+  - open-source model providers above 10^25 FLOP training threshold
+  - GPAI models with systemic risk designation
+regulation_references:
+  - article: "EU AI Act Article 53 - Obligations for GPAI Model Providers"
+    url: "https://artificialintelligenceact.eu/article/53/"
+    jurisdiction: EU
+  - article: "EU AI Act Article 55 - Obligations for GPAI with Systemic Risk"
+    url: "https://artificialintelligenceact.eu/article/55/"
+    jurisdiction: EU
+  - article: "EU AI Act Annex XI - Technical Documentation for GPAI"
+    url: "https://artificialintelligenceact.eu/annex/11/"
+    jurisdiction: EU
+policy_logic:
+  technical_documentation_published_must_be_true: true
+  model_card_includes_annex_xi_fields_must_be_true: true
+  copyright_compliance_policy_in_place_must_be_true: true
+  downstream_deployer_instructions_published_must_be_true: true
+  model_evaluation_results_public_must_be_true: true
+  systemic_risk_assessment_completed_must_be_true: true
+  adversarial_testing_completed_must_be_true: true
+  serious_incident_reporting_mechanism_active_must_be_true: true
+  cybersecurity_protection_adequate_must_be_true: true
+  output_watermarking_implemented_must_be_true: true
+remediation_steps:
+  - "Publish technical documentation per Annex XI before making model available — fines up to EUR 15M or 3% global turnover"
+  - "Implement copyright reservation detection per Article 53 Para 1c and Directive 2019/790 Article 4(3)"
+  - "If above systemic risk compute threshold, register with EU AI Office and conduct adversarial testing per Article 55"
+  - "Publish model evaluation results using standardised protocols per Article 55 Para 1a"
+  - "Implement output watermarking for generated content per Article 50 Para 2"
+created_at: "2026-03-18T00:00:00Z"
