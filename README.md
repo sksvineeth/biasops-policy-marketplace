@@ -180,8 +180,11 @@ BiasOps is a central, growing library of executable compliance policies organize
 |---|---|---|---|---|---|
 | GDPR-ART22-001 | Automated Decision-Making | GDPR Article 22 | EU | CRITICAL | ✅ Active |
 | FCPA-GIFTS-001 | Gifts & Hospitality Thresholds | FCPA / French AFA | US + FR | HIGH | ✅ Active |
-| EU-AI-ACT-001 | High Risk System Obligations | EU AI Act Annex III | EU | CRITICAL | 🔜 Coming |
-| EU-AI-ACT-002 | Prohibited Practices | EU AI Act Article 5 | EU | CRITICAL | 🔜 Coming |
+| EU-AI-ACT-001 | High Risk System Obligations | EU AI Act Annex III | EU | CRITICAL | ✅ Active — v1.2.0 |
+| EU-AI-ACT-002 | Prohibited Practices | EU AI Act Article 5 | EU | CRITICAL | ✅ Active — v1.1.0 |
+| EU-AI-ACT-003 | High Risk LLM Application Obligations | EU AI Act Articles 13/14/15/50 | EU | CRITICAL | ✅ Active — v1.0.0 |
+| EU-AI-ACT-004 | GPAI Model Obligations | EU AI Act Article 53/55 | EU | HIGH | ✅ Active — v1.0.0 |
+| EU-AI-ACT-005 | Environmental Impact & Sustainability | EU AI Act Article 40/95 | EU | MEDIUM | ✅ Active — v1.0.0 |
 | SOX-404-001 | ML Model Risk Controls | SOX Section 404 | US | HIGH | 🔜 Coming |
 | ISO-42001-001 | AI Management System | ISO/IEC 42001:2023 | Global | MEDIUM | 🔜 Coming |
 
