@@ -10,7 +10,6 @@ import logging
 import shutil
 from pathlib import Path
 
-import yaml
 
 from biasops.loader import PolicyLoadError, load_policy
 from biasops.models import Policy

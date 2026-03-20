@@ -7,6 +7,9 @@ from pathlib import Path
 
 import pytest
 
+from fastapi.testclient import TestClient
+
+from biasops.api import app
 from biasops.registry import PolicyRegistry
 
 
@@ -206,9 +209,6 @@ def test_stats_eu_present(registry):
 # Registry API endpoints
 # ---------------------------------------------------------------------------
 
-
-from fastapi.testclient import TestClient
-from biasops.api import app
 
 client = TestClient(app)
 

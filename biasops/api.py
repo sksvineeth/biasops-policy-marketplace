@@ -9,12 +9,10 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, HTTPException, status
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from biasops.engine import PolicyEngine
-from biasops.loader import PolicyLoadError, load_policy_from_dict
-from biasops.models import Policy, PolicyReport
+from biasops.models import PolicyReport
 from biasops.registry import PolicyRegistry
 from biasops.validator import validate_policy_schema
 

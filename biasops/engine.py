@@ -11,7 +11,6 @@ from biasops.loader import load_policies_from_directory, load_policy
 from biasops.models import (
     EnforcementMode,
     Policy,
-    PolicyCheck,
     PolicyReport,
     ReportStatus,
     RiskLevel,
