@@ -1,0 +1,99 @@
+# attestations/fraud-investigator-v2.yaml
+# Attestation record for the fraud investigation agent.
+# This agent is authorized to investigate transactions and escalate to human review.
+# It is NOT authorized to take adverse actions (freeze, SAR filing) autonomously in EU.
+
+agent_id: fraud-investigator-v2
+tenant: acme-financial-prod
+version: "2.1.4"
+description: >
+  Agentic fraud investigation system. Monitors transactions, reasons over
+  anomaly patterns, and escalates to human review queues. Authorized for
+  summarization and scoring in all jurisdictions. Adverse actions (freeze,
+  SAR filing) require human review in EU jurisdictions.
+owner: fraud-risk-engineering@acme.com
+created_at: "2026-01-15T09:00:00Z"
+revoked: false
+
+skills:
+
+  - name: summarize_transaction
+    description: Summarize a transaction record for human review.
+    attested_by: sarah.chen@acme.com
+    attested_by_role: Model Validation Lead
+    attested_on: "2026-01-15T09:00:00Z"
+    valid_until: "2026-07-15T09:00:00Z"
+    context_scope:
+      jurisdictions: []       # no restriction — valid globally
+      risk_levels: []         # no restriction
+      data_types: []          # no restriction
+      environments: [production, staging]
+      requires_human_review: false
+    model_constraints:
+      approved: []            # any approved model
+      prohibited: []
+    delegation: none
+
+  - name: score_fraud_risk
+    description: Compute a fraud risk score for a transaction.
+    attested_by: sarah.chen@acme.com
+    attested_by_role: Model Validation Lead
+    attested_on: "2026-01-15T09:00:00Z"
+    valid_until: "2026-07-15T09:00:00Z"
+    context_scope:
+      jurisdictions: []
+      risk_levels: [low, medium, high]
+      data_types: [financial, PII]
+      environments: [production, staging]
+      requires_human_review: false
+    model_constraints:
+      approved: [gpt-4o-validated-v2, claude-3-5-sonnet-validated]
+      prohibited: [gpt-4o-latest]   # unapproved preview version
+    delegation: none
+
+  - name: escalate_to_human_queue
+    description: >
+      Route a flagged transaction to the human review queue.
+      This is the required action after a fraud score exceeds threshold.
+    attested_by: james.park@acme.com
+    attested_by_role: Head of Fraud Operations
+    attested_on: "2026-01-15T09:00:00Z"
+    valid_until: "2026-07-15T09:00:00Z"
+    context_scope:
+      jurisdictions: []
+      risk_levels: []
+      data_types: []
+      environments: [production, staging]
+      requires_human_review: false
+    model_constraints:
+      approved: []
+      prohibited: []
+    delegation: allowlist
+    allowed_delegates: [human-review-agent-v1]
+    notes: >
+      Delegation to human-review-agent-v1 is permitted so that the
+      escalation workflow can be handed off cleanly.
+
+  - name: freeze_account
+    description: >
+      Freeze a customer account pending fraud investigation.
+      This is a HIGH-RISK adverse action. Requires human review in EU.
+      Only permitted for low/medium risk in US/UK without human review.
+    attested_by: james.park@acme.com
+    attested_by_role: Head of Fraud Operations
+    attested_on: "2026-01-15T09:00:00Z"
+    valid_until: "2026-07-15T09:00:00Z"
+    context_scope:
+      jurisdictions: [US, UK]     # NOT authorized in EU without human review
+      risk_levels: [low, medium]  # high risk requires human judgment
+      data_types: [financial, PII]
+      environments: [production]  # never in staging
+      requires_human_review: false
+    model_constraints:
+      approved: [gpt-4o-validated-v2]
+      prohibited: [gpt-4o-latest, claude-3-5-sonnet-validated]
+    delegation: none
+    notes: >
+      EU freeze_account requests must go through escalate_to_human_queue first.
+      EU AI Act Article 14 requires human oversight for automated adverse actions.
+      High-risk cases always require human review regardless of jurisdiction.
