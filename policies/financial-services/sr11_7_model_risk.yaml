@@ -45,15 +45,8 @@ regulation_references:
 policy_logic:
   # Model documentation completeness score (0-1)
   model_documentation_completeness_min_threshold: 0.80
-  
-  # Independent validation must be performed
-  independent_validation_performed_must_be_true: true
-  
-  # Ongoing monitoring plan must exist
-  monitoring_plan_documented_must_be_true: true
-  
-  # Change management controls in place
-  change_management_documented_must_be_true: true
+  # Note: independent_validation, monitoring_plan, change_management
+  # evaluated via structured checks block below to avoid double-counting
 
 checks:
   - name: "Model Documentation Completeness"

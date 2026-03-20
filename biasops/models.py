@@ -64,6 +64,43 @@ def _utc_now() -> datetime:
 # ---------------------------------------------------------------------------
 
 
+class ThresholdType(str, Enum):
+    """Comparison operator used in a structured policy check."""
+
+    MIN = "min"
+    MAX = "max"
+    MUST_BE_TRUE = "must_be_true"
+    MUST_BE_FALSE = "must_be_false"
+    SIGNIFICANCE = "significance"
+
+
+class PolicyCheck(BaseModel):
+    """A single structured rule inside a policy's ``checks`` list.
+
+    More explicit than the flat ``policy_logic`` suffix approach — each
+    check names its metric, threshold type, and threshold value directly.
+
+    Attributes:
+        name:              Human-readable label for this check.
+        description:       What the check validates and why.
+        metric:            The model-metadata key to evaluate.
+        threshold_type:    Comparison operator (min / max / must_be_true …).
+        threshold_value:   The target value to compare against.
+        failure_severity:  Severity when this check fails.
+    """
+
+    model_config = {"frozen": True}
+
+    name: str = Field(..., description="Human-readable label for the check.")
+    description: str = Field(default="", description="What the check validates.")
+    metric: str = Field(..., description="Model-metadata key to evaluate.")
+    threshold_type: ThresholdType = Field(..., description="Comparison operator.")
+    threshold_value: float | bool = Field(..., description="Target value.")
+    failure_severity: RiskLevel = Field(
+        default=RiskLevel.HIGH, description="Severity when this check fails."
+    )
+
+
 class RegulationReference(BaseModel):
     """A pointer to a specific regulatory article that a policy addresses.
 
@@ -189,6 +226,12 @@ class Policy(BaseModel):
         default_factory=list,
         description="Model or system identifiers this policy targets. "
         "Empty list means the policy applies universally.",
+    )
+    checks: list[PolicyCheck] = Field(
+        default_factory=list,
+        description="Structured check list. When present, the engine evaluates "
+        "these in addition to (or instead of) policy_logic suffix rules. "
+        "Preferred format for new policies — more explicit than suffix keys.",
     )
 
 

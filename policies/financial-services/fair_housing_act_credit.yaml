@@ -64,11 +64,9 @@ policy_logic:
   # Mortgage approval rate parity (similar to 4/5ths rule)
   approval_rate_parity_min_threshold: 0.80
   
-  # Geographic lending equity (lending across minority/non-minority tracts)
-  geographic_equity_index_min_threshold: 0.65
-  
   # Feature importance audit: no single protected-correlated feature > 15% importance
   protected_feature_importance_max_threshold: 0.15
+  # Note: geographic_equity_index evaluated via structured checks block below
 
 checks:
   - name: "Proxy Variable Detection"

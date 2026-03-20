@@ -6,7 +6,10 @@ jurisdiction: EU
 risk_level: HIGH
 enforcement_mode: warn
 maintained_by: BiasOps Core Team
-applies_to:
+bias_types_addressed:
+  - gpai-systemic-risk
+  - copyright-non-compliance
+  - transparency-failure
   - foundation model providers
   - GPAI model developers publishing models for downstream use
   - open-source model providers above 10^25 FLOP training threshold

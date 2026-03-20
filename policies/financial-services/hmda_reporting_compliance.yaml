@@ -48,15 +48,13 @@ regulation_references:
     jurisdiction: US
 
 policy_logic:
-  # Data completeness: required HMDA fields must be present
-  hmda_field_completeness_min_threshold: 0.95
-  
   # Denial rate disparity across race/ethnicity
   denial_rate_disparity_max_threshold: 2.0
   
   # Geographic concentration index (Herfindahl-style)
   # High concentration in non-minority areas may indicate redlining
   geographic_lending_equity_min_threshold: 0.60
+  # Note: hmda_field_completeness evaluated via structured checks block below
 
 checks:
   - name: "HMDA Field Completeness"

@@ -6,7 +6,9 @@ jurisdiction: EU
 risk_level: MEDIUM
 enforcement_mode: warn
 maintained_by: BiasOps Core Team
-applies_to:
+bias_types_addressed:
+  - environmental-impact
+  - sustainability-non-compliance
   - all AI system providers (GP and HR)
   - model training operations above threshold compute
   - cloud-deployed AI systems in regulated industries

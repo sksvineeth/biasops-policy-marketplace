@@ -1,11 +1,34 @@
 # fairness_basic.yaml — Built-in policy enforcing basic fairness constraints.
 # Ships with BiasOps as a sensible default starting point.
 
-metadata:
-  name: "fairness-basic"
-  version: "1.0.0"
-  description: "Basic fairness policy with demographic parity and equal opportunity checks."
-  author: "biasops"
-  tags: ["fairness", "builtin"]
+id: FAIRNESS-BASIC-001
+name: Basic Fairness Policy
+version: 1.0.0
+domain: general
+jurisdiction: Global
+risk_level: HIGH
+enforcement_mode: warn
+maintained_by: BiasOps Core Team
+applies_to: []
 
-rules: []
+bias_types_addressed:
+  - demographic-parity
+  - equal-opportunity
+
+regulation_references:
+  - article: "IEEE Ethically Aligned Design - Principle of Fairness"
+    url: "https://standards.ieee.org/industry-connections/ec/autonomous-systems/"
+    jurisdiction: Global
+
+policy_logic:
+  demographic_parity_max_threshold: 0.10
+  equal_opportunity_max_threshold: 0.10
+  bias_audit_completed_must_be_true: true
+
+remediation_steps:
+  - "Measure demographic parity gap across protected classes and ensure it is below 0.10"
+  - "Measure equal opportunity gap (true positive rate difference) across protected classes"
+  - "Complete a bias audit using a recognised methodology (e.g. Aequitas, IBM AI Fairness 360)"
+  - "Document findings and remediation actions in the model card"
+
+created_at: "2026-01-01T00:00:00Z"

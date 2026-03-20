@@ -11,9 +11,11 @@ from biasops.loader import load_policies_from_directory, load_policy
 from biasops.models import (
     EnforcementMode,
     Policy,
+    PolicyCheck,
     PolicyReport,
     ReportStatus,
     RiskLevel,
+    ThresholdType,
     Violation,
 )
 
@@ -195,22 +197,10 @@ class PolicyEngine:
     def _evaluate_single_policy(
         self, policy: Policy, model_metadata: dict
     ) -> list[Violation]:
-        """Compare *model_metadata* values against one policy's threshold rules.
+        """Evaluate one policy against model metadata — handles both formats.
 
-        Iterates over the keys in ``policy.policy_logic``.  Each key whose
-        suffix matches a recognised threshold pattern is evaluated:
-
-        * ``*_max_threshold`` — value must be **at or below** the threshold.
-        * ``*_min_threshold`` — value must be **at or above** the threshold.
-        * ``*_must_be_true``  — value must be ``True``.
-        * ``*_must_be_false`` — value must be ``False``.
-        * ``*_block_threshold`` — value must be at or below; violation is
-          ``CRITICAL``.
-        * ``*_warn_threshold``  — value must be at or below; violation is
-          ``HIGH``.
-
-        If the metadata dict is missing a required key the check is skipped
-        and a warning is logged.
+        Evaluates structured ``policy.checks`` first (preferred format), then
+        falls back to flat ``policy_logic`` suffix rules (legacy format).
 
         Args:
             policy: The policy to evaluate.
@@ -219,10 +209,89 @@ class PolicyEngine:
         Returns:
             A list of :class:`Violation` objects (empty if the policy passes).
         """
-        violations: list[Violation] = []
         citation = ", ".join(
             f"{ref.jurisdiction} {ref.article}" for ref in policy.regulation_references
         )
+        violations: list[Violation] = []
+        violations.extend(self._evaluate_checks(policy, model_metadata, citation))
+        violations.extend(self._evaluate_policy_logic(policy, model_metadata, citation))
+        return violations
+
+    def _evaluate_checks(
+        self, policy: Policy, model_metadata: dict, citation: str
+    ) -> list[Violation]:
+        """Evaluate the structured ``policy.checks`` list.
+
+        Each check explicitly names its metric, comparison type, and threshold.
+        Missing metadata keys are logged and skipped.
+        """
+        violations: list[Violation] = []
+
+        for check in policy.checks:
+            if check.metric not in model_metadata:
+                logger.warning(
+                    "Policy '%s' check '%s': metadata key '%s' not found — skipping.",
+                    policy.id, check.name, check.metric,
+                )
+                continue
+
+            value = model_metadata[check.metric]
+            violated = False
+            message = ""
+
+            if check.threshold_type == ThresholdType.MIN:
+                if value < check.threshold_value:
+                    violated = True
+                    message = (
+                        f"[{check.name}] '{check.metric}' is {value}, "
+                        f"below minimum {check.threshold_value}"
+                    )
+            elif check.threshold_type == ThresholdType.MAX:
+                if value > check.threshold_value:
+                    violated = True
+                    message = (
+                        f"[{check.name}] '{check.metric}' is {value}, "
+                        f"exceeds maximum {check.threshold_value}"
+                    )
+            elif check.threshold_type == ThresholdType.MUST_BE_TRUE:
+                if value is not True:
+                    violated = True
+                    message = f"[{check.name}] '{check.metric}' must be true but is {value}"
+            elif check.threshold_type == ThresholdType.MUST_BE_FALSE:
+                if value is not False:
+                    violated = True
+                    message = f"[{check.name}] '{check.metric}' must be false but is {value}"
+            elif check.threshold_type == ThresholdType.SIGNIFICANCE:
+                if value > check.threshold_value:
+                    violated = True
+                    message = (
+                        f"[{check.name}] '{check.metric}' p-value {value} "
+                        f"exceeds significance threshold {check.threshold_value}"
+                    )
+
+            if violated:
+                violations.append(
+                    Violation(
+                        policy_id=policy.id,
+                        severity=check.failure_severity,
+                        message=message,
+                        regulation_citation=citation,
+                        remediation_steps=policy.remediation_steps,
+                    )
+                )
+
+        return violations
+
+    def _evaluate_policy_logic(
+        self, policy: Policy, model_metadata: dict, citation: str
+    ) -> list[Violation]:
+        """Evaluate flat ``policy_logic`` suffix rules (legacy format).
+
+        Retained for backwards compatibility with policies that do not use
+        the structured ``checks`` list.  Iterates over ``policy.policy_logic``
+        keys and matches recognised suffixes.
+        """
+        violations: list[Violation] = []
 
         for key, threshold in policy.policy_logic.items():
             for suffix, (expectation, severity_override) in _THRESHOLD_SUFFIXES.items():
