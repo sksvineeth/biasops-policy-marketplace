@@ -15,7 +15,7 @@ from biasops.saga.attestation import (
     ModelConstraint,
     SkillAttestation,
 )
-from biasops.saga.registry import AttestationRegistry, AttestationLoadError
+from biasops.saga.registry import AttestationRegistry
 from biasops.saga.verifier import SAGAVerifier
 
 
