@@ -10,3 +10,7 @@ build/
 .ruff_cache/
 *.coverage
 htmlcov/
+
+# Runtime artifacts
+audit.jsonl
+attestations/test-*.yaml
