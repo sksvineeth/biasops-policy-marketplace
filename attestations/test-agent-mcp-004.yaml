@@ -1,0 +1,28 @@
+agent_id: test-agent-mcp-004
+created_at: '2026-03-21T00:03:44.201640Z'
+description: ''
+owner: ''
+revoke_reason: ''
+revoked: false
+skills:
+- allowed_delegates: []
+  attested_by: approver@example.com
+  attested_by_role: Risk Lead
+  attested_on: '2026-03-21T00:03:55.896903Z'
+  context_scope:
+    data_types: []
+    environments: []
+    jurisdictions:
+    - US
+    requires_human_review: false
+    risk_levels: []
+  delegation: none
+  description: ''
+  model_constraints:
+    approved: []
+    prohibited: []
+  name: restricted_action
+  notes: ''
+  valid_until: '2026-04-20T00:03:55.896903Z'
+tenant: test-org
+version: 1.0.0
