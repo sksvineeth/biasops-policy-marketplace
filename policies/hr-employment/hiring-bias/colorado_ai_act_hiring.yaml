@@ -1,0 +1,369 @@
+# ============================================================
+# BiasOps Policy: Colorado AI Act SB24-205 (2024)
+# Consumer Protections for Artificial Intelligence — Hiring
+# Version: 1.0.0
+# ============================================================
+#
+# SCOPE
+# -----
+# Colorado's AI Act is the most structurally comprehensive US
+# state AI law to date. It governs "high-risk AI systems" used
+# for "consequential decisions" — which explicitly includes:
+# hiring, promotion, termination, compensation, and performance
+# management.
+#
+# WHO IT APPLIES TO
+# -----------------
+# Developers: companies that develop high-risk AI systems
+# Deployers: companies that use high-risk AI systems
+#            (>= 1 employee in Colorado OR any Colorado resident affected)
+#
+# For BiasOps: primarily deployer obligations are relevant,
+# as most customers are deploying third-party or internally-built
+# hiring AI rather than developing foundation models.
+#
+# EFFECTIVE DATE: February 1, 2026
+# (originally June 30, 2026; pulled forward by amendment)
+#
+# WHAT MAKES COLORADO THE STRICTEST
+# -----------------------------------
+# 1. Annual impact assessments (not just at deployment)
+# 2. 90-day reassessment after any AI system modification
+# 3. Risk management policies required (50+ employees)
+# 4. Civil liability — private right of action
+# 5. "Algorithmic discrimination" standard (broader than Title VII)
+# ============================================================
+
+id: CO-SB24205-001
+name: Colorado AI Act — High-Risk AI in Employment (Deployer Obligations)
+version: 1.0.0
+domain: hr-employment
+jurisdiction: US-CO
+risk_level: CRITICAL
+enforcement_mode: block
+maintained_by: BiasOps Core Team
+effective_date: "2026-02-01"
+last_reviewed: "2026-03-24"
+enforced_by: Colorado Attorney General
+penalties:
+  civil_penalty: "up to $20,000 per violation"
+  private_right_of_action: true
+  note: >
+    Colorado includes a private right of action — individuals
+    can sue directly, not just file complaints with the AG.
+    This significantly raises the liability stakes.
+
+applies_to:
+  - high_risk_ai_systems_for_hiring
+  - high_risk_ai_systems_for_promotion
+  - high_risk_ai_systems_for_compensation
+  - high_risk_ai_systems_for_performance_management
+  - high_risk_ai_systems_for_termination
+
+applies_when:
+  employer_size: ">= 1 employee"   # no minimum — applies to all employers
+  risk_management_requirements:
+    threshold_employees: 50         # risk management policy required at 50+
+  colorado_nexus:
+    - deployer_has_employees_in_colorado: true
+    - OR decision_affects_colorado_resident: true
+
+protected_classes:                  # Colorado: "protected class" defined broadly
+  - race
+  - color
+  - ethnicity
+  - national_origin
+  - sex
+  - religion
+  - disability
+  - age
+  - sexual_orientation
+  - marital_status
+  - veteran_status
+  - note: >
+      Colorado's "algorithmic discrimination" standard covers
+      unlawful differential treatment of any protected class —
+      broader than the Title VII five classes.
+
+regulation_references:
+  - article: "Colorado SB24-205 — Consumer Protections for AI (2024)"
+    url: "https://leg.colorado.gov/bills/sb24-205"
+    jurisdiction: US-CO
+  - article: "Colorado Revised Statutes §6-1-1701 through §6-1-1707"
+    url: "https://leg.colorado.gov/sites/default/files/2024a_205_signed.pdf"
+    jurisdiction: US-CO
+
+# ============================================================
+# RULES
+# ============================================================
+
+rules:
+
+  - id: RULE-CO-001
+    name: No Algorithmic Discrimination
+    article: "Colorado SB24-205 §6-1-1703 — Deployer Obligations"
+    article_url: "https://leg.colorado.gov/bills/sb24-205"
+    type: numeric
+    metric_id: adverse_impact_ratio      # same metric_id as EEOC and Illinois
+    stage: post_training
+    severity: BLOCK
+    description: >
+      Colorado prohibits "algorithmic discrimination" — unlawful
+      differential treatment or impact on any protected class
+      resulting from the use of a high-risk AI system. The 0.80
+      adverse impact ratio threshold (EEOC 4/5ths rule) is applied
+      as the operationalisation of this standard, consistent with
+      EEOC RULE-EEOC-001 and Illinois RULE-IL-001.
+    threshold: 0.80
+    operator: ">="
+    threshold_provenance:
+      source: >
+        Colorado SB24-205 §6-1-1703(2)(a) — "algorithmic discrimination"
+        prohibition; threshold derived from EEOC UGESP 29 CFR §1607.4(D)
+        as the most established operationalisation. Colorado does not
+        specify a numeric threshold.
+      confidence: MEDIUM
+      notes: >
+        Same situation as Illinois — outcome standard without a
+        specified numeric threshold. BiasOps applies 0.80 as the
+        industry standard. Colorado AG guidance is still developing.
+    remediation: >
+      See EEOC RULE-EEOC-001. Metric_id is shared — engine
+      deduplicates across EEOC, Illinois, and Colorado policies.
+
+  - id: RULE-CO-002
+    name: Annual Impact Assessment
+    article: "Colorado SB24-205 §6-1-1703(2)(b) — Impact Assessment"
+    article_url: "https://leg.colorado.gov/bills/sb24-205"
+    type: attestation
+    stage: pre_deployment
+    severity: BLOCK
+    description: >
+      Before deploying a high-risk AI system, and annually
+      thereafter, deployers must complete an impact assessment.
+      The assessment must document: the system's purpose and
+      intended benefits, potential risks of algorithmic
+      discrimination, how the deployer manages those risks,
+      the data used, performance metrics, and post-deployment
+      monitoring plans. This is more detailed than NYC LL144's
+      bias audit requirement.
+    what_biasops_checks:
+      - impact_assessment_completed: true
+      - impact_assessment_date_within_12_months: true
+      - assessment_covers_required_elements: true
+    required_assessment_elements:
+      - system_purpose_and_benefits
+      - algorithmic_discrimination_risk_analysis
+      - risk_management_measures
+      - training_data_description
+      - performance_metrics_documented
+      - post_deployment_monitoring_plan
+      - human_review_process_described
+    required_metadata_keys:
+      - impact_assessment_date
+      - impact_assessment_document_url
+      - impact_assessment_next_due_date
+    threshold:
+      assessment_age_months: 12
+      reassessment_after_modification_days: 90
+    threshold_provenance:
+      source: >
+        Colorado SB24-205 §6-1-1703(2)(b) — annual assessment;
+        §6-1-1703(2)(c) — 90-day reassessment after modification
+      confidence: HIGH
+    remediation: >
+      Complete an impact assessment document covering all 6 required
+      elements before deployment. Schedule annual reassessments.
+      Trigger a 90-day reassessment whenever the AI system is
+      materially modified (retrained, new features added, threshold
+      changed). Store assessment document URL in metadata.
+
+  - id: RULE-CO-003
+    name: 90-Day Reassessment After Modification
+    article: "Colorado SB24-205 §6-1-1703(2)(c) — Modification Trigger"
+    article_url: "https://leg.colorado.gov/bills/sb24-205"
+    type: attestation
+    stage: post_training
+    severity: BLOCK
+    description: >
+      Any material modification to a high-risk AI system triggers
+      a new impact assessment that must be completed within 90 days.
+      "Material modification" includes: retraining on new data,
+      changes to model architecture, changes to decision thresholds,
+      expanding the system to new use cases or job categories.
+      This rule is checked by BiasOps on every training run —
+      if the model version has changed since the last assessment,
+      the 90-day clock is running.
+    what_biasops_checks:
+      - model_version_changed_since_last_assessment: check
+      - if_changed_reassessment_due_within_90_days: true
+      - reassessment_completed_or_scheduled: true
+    required_metadata_keys:
+      - model_version
+      - last_impact_assessment_date
+      - last_assessed_model_version
+      - reassessment_due_date             # computed: last_modification + 90 days
+    threshold:
+      reassessment_sla_days: 90
+    threshold_provenance:
+      source: "Colorado SB24-205 §6-1-1703(2)(c)"
+      confidence: HIGH
+    remediation: >
+      When BiasOps detects a model version change, it sets
+      reassessment_due_date = today + 90 days in the audit artifact.
+      Schedule and complete the reassessment before that date.
+      Until the reassessment is complete, the system should not
+      be promoted to production for Colorado-resident decisions.
+
+  - id: RULE-CO-004
+    name: Risk Management Policy (50+ Employees)
+    article: "Colorado SB24-205 §6-1-1703(2)(d) — Risk Management"
+    article_url: "https://leg.colorado.gov/bills/sb24-205"
+    type: attestation
+    stage: pre_deployment
+    severity: BLOCK
+    description: >
+      Deployers with 50 or more employees must implement a risk
+      management policy and programme for high-risk AI systems.
+      The policy must align with a nationally or internationally
+      recognised AI risk management framework — Colorado explicitly
+      names NIST AI RMF, ISO 42001, or equivalent as acceptable.
+    what_biasops_checks:
+      - risk_management_policy_present: true
+      - policy_aligns_with_recognised_framework: true
+      - framework_named: true
+    required_metadata_keys:
+      - risk_management_policy_document_url
+      - risk_management_framework           # nist_ai_rmf | iso_42001 | other
+      - risk_management_policy_last_reviewed
+    accepted_frameworks:
+      - nist_ai_rmf                         # NIST AI RMF 1.0 (2023)
+      - iso_42001                           # ISO/IEC 42001:2023
+      - eu_ai_act_qms                       # EU AI Act Art 17 QMS
+      - other_documented                    # any other, with documentation
+    condition: "employer_employee_count >= 50"
+    threshold_provenance:
+      source: >
+        Colorado SB24-205 §6-1-1703(2)(d); NIST AI RMF and ISO 42001
+        explicitly named as acceptable frameworks in bill text
+      confidence: HIGH
+    remediation: >
+      Implement a risk management programme aligned with NIST AI RMF
+      or ISO 42001. If you already have an EU AI Act QMS (RULE-002
+      in the EU AI Act policy), that satisfies this requirement —
+      document the cross-reference. Record the framework name and
+      policy document URL in metadata.
+
+  - id: RULE-CO-005
+    name: Notice to Individuals Subject to Consequential Decision
+    article: "Colorado SB24-205 §6-1-1703(2)(e) — Individual Notice"
+    article_url: "https://leg.colorado.gov/bills/sb24-205"
+    type: attestation
+    stage: pre_deployment
+    severity: BLOCK
+    description: >
+      Deployers must notify individuals that a high-risk AI system
+      is being used to make or substantially inform a consequential
+      decision affecting them. The notice must include: that an AI
+      system is used, the purpose of the system, and how to request
+      a human review of the decision (opportunity to correct errors
+      in personal data used by the system).
+    what_biasops_checks:
+      - individual_ai_notice_implemented: true
+      - notice_includes_system_purpose: true
+      - human_review_request_process_defined: true
+      - data_correction_process_defined: true
+    required_config_keys:
+      - individual_notice_implemented
+      - human_review_request_url
+      - data_correction_contact
+    threshold_provenance:
+      source: "Colorado SB24-205 §6-1-1703(2)(e) and (f)"
+      confidence: HIGH
+    remediation: >
+      Implement notice in job application and hiring workflows.
+      Include: disclosure that AI is used, what it assesses,
+      and how to request human review. A human review process
+      must be genuinely available — not a formality.
+      This requirement overlaps with NYC LL144 RULE-LL144-003
+      for NYC-based candidates; Colorado applies to all Colorado
+      residents regardless of NYC jurisdiction.
+
+  - id: RULE-CO-006
+    name: Post-Deployment Monitoring
+    article: "Colorado SB24-205 §6-1-1703(2)(g) — Ongoing Monitoring"
+    article_url: "https://leg.colorado.gov/bills/sb24-205"
+    type: attestation
+    stage: runtime
+    severity: WARN
+    description: >
+      Deployers must monitor high-risk AI systems post-deployment
+      for instances of algorithmic discrimination. This must include
+      ongoing data collection and analysis sufficient to detect
+      emerging disparate impact. Colorado is the first US state to
+      explicitly mandate ongoing post-deployment monitoring (not
+      just pre-deployment assessment).
+    what_biasops_checks:
+      - post_deployment_monitoring_active: true
+      - monitoring_covers_protected_classes: true
+      - monitoring_frequency_documented: true
+      - escalation_trigger_defined: true
+    required_config_keys:
+      - post_deployment_monitoring_enabled
+      - monitoring_frequency              # monthly | quarterly
+      - monitoring_alert_threshold        # AIR threshold that triggers review
+      - monitoring_responsible_team
+    threshold_provenance:
+      source: "Colorado SB24-205 §6-1-1703(2)(g)"
+      confidence: HIGH
+    remediation: >
+      Implement monthly or quarterly production monitoring of
+      selection rates and AIR by protected class. Set an alert
+      threshold (recommended: AIR < 0.85, giving headroom before
+      the 0.80 BLOCK threshold). Assign a responsible team.
+      Log monitoring results — Colorado AG may request records.
+
+# ============================================================
+# CROSS-POLICY OVERLAP
+# ============================================================
+
+cross_policy_overlap:
+  - this_rule: RULE-CO-001
+    eeoc_rule: RULE-EEOC-001
+    illinois_rule: RULE-IL-001
+    overlap: >
+      All three rules share metric_id: adverse_impact_ratio.
+      Engine computes once, satisfies all three. Report shows
+      all three citations with their respective confidence levels.
+
+  - this_rule: RULE-CO-004
+    eu_ai_act_rule: RULE-002
+    overlap: >
+      Colorado risk management policy aligns with EU AI Act
+      Article 17 QMS. If RULE-002 (QMS) is satisfied in the
+      EU AI Act policy, it satisfies RULE-CO-004. The audit
+      artifact cross-references both.
+
+  - this_rule: RULE-CO-002
+    nyc_rule: RULE-LL144-001
+    overlap: >
+      Colorado's impact assessment and NYC's bias audit serve
+      similar purposes but have different content requirements.
+      They do NOT deduplicate — both must be completed separately.
+      Colorado's assessment is more comprehensive; NYC's audit
+      focuses narrowly on selection rate impact ratios.
+
+# ============================================================
+# REMEDIATION MAP
+# ============================================================
+
+remediation_map:
+  RULE-CO-001: "No algorithmic discrimination — AIR >= 0.80; deduplicates with EEOC RULE-EEOC-001"
+  RULE-CO-002: "Complete annual impact assessment covering all 6 required elements"
+  RULE-CO-003: "Trigger reassessment within 90 days of any material model modification"
+  RULE-CO-004: "Implement risk management programme aligned with NIST AI RMF or ISO 42001 (50+ employees)"
+  RULE-CO-005: "Implement individual notice with human review request process"
+  RULE-CO-006: "Activate post-deployment monitoring with alert thresholds and responsible team"
+
+created_at: "2026-03-24T00:00:00Z"
+updated_at: "2026-03-24T00:00:00Z"

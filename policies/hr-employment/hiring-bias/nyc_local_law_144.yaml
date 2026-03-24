@@ -1,0 +1,295 @@
+# ============================================================
+# BiasOps Policy: NYC Local Law 144 (2023)
+# Automated Employment Decision Tools
+# Version: 1.0.0
+# ============================================================
+#
+# SCOPE
+# -----
+# Applies to employers and employment agencies using Automated
+# Employment Decision Tools (AEDTs) to screen candidates or
+# employees for positions based in New York City.
+# An AEDT is any computational process derived from ML, AI,
+# statistical modelling, or data analytics that issues a
+# simplified output (score, classification, ranking, tag)
+# that is used to substantially assist or replace discretionary
+# decision-making in hiring or promotion.
+#
+# WHAT THIS POLICY ADDS OVER EEOC
+# --------------------------------
+# NYC LL144 is narrower than EEOC Title VII in scope
+# (NYC only, AEDT-specific) but stricter in three ways:
+#   1. Mandatory annual independent bias audit
+#   2. Public posting of audit results
+#   3. 10-business-day advance candidate notice
+# These are attestation rules — no new metric_ids needed.
+# The engine skips attestation rules in MVP and generates
+# a compliance checklist item instead.
+# ============================================================
+
+id: NYC-LL144-001
+name: NYC Local Law 144 — Automated Employment Decision Tools
+version: 1.0.0
+domain: hr-employment
+jurisdiction: US-NY-NYC
+risk_level: HIGH
+enforcement_mode: block
+maintained_by: BiasOps Core Team
+effective_date: "2023-07-05"
+last_reviewed: "2026-03-24"
+enforced_by: NYC Department of Consumer and Worker Protection (DCWP)
+penalties:
+  per_violation: "$375 to $1,500"
+  per_day_continuing: "$375 to $1,500"
+
+applies_to:
+  - hiring_models
+  - promotion_decision_tools
+  - resume_screening
+  - candidate_ranking
+  - interview_scheduling_ai
+
+applies_when:
+  - employer_uses_aedt_for_nyc_based_roles: true
+  - aedt_substantially_assists_or_replaces_human_decision: true
+  - note: >
+      Law is triggered when the tool "substantially assists or
+      replaces" discretionary decision-making. Employers have
+      argued that human review breaks the trigger — courts have
+      not fully resolved this. BiasOps applies conservatively:
+      if AI influences the candidate pool the human reviews,
+      it substantially assists the decision.
+
+regulation_references:
+  - article: "NYC Local Law 144 of 2021 (Int 1894-A)"
+    url: "https://legistar.council.nyc.gov/LegislationDetail.aspx?ID=4344524"
+    jurisdiction: US-NY-NYC
+  - article: "NYC DCWP Final Rules on AEDTs (April 2023)"
+    url: "https://rules.cityofnewyork.us/rule/automated-employment-decision-tools/"
+    jurisdiction: US-NY-NYC
+  - article: "NYC Admin Code §20-870 through §20-875"
+    url: "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-123186"
+    jurisdiction: US-NY-NYC
+
+# ============================================================
+# RULES — all attestation in this policy
+# No new metric_ids: numeric coverage inherited from EEOC policy
+# ============================================================
+
+rules:
+
+  - id: RULE-LL144-001
+    name: Annual Independent Bias Audit
+    article: "NYC Admin Code §20-871(a) — Bias Audit Requirement"
+    article_url: "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-123186"
+    type: attestation
+    stage: pre_deployment
+    severity: BLOCK
+    description: >
+      Before deploying an AEDT, and annually thereafter, the
+      employer must commission a bias audit by an independent
+      auditor. The auditor must not be employed by or have a
+      financial interest in the employer or the AEDT vendor.
+      The audit must calculate selection rate and impact ratio
+      data for race/ethnicity and sex categories.
+    what_biasops_checks:
+      - independent_bias_audit_completed: true
+      - audit_date_within_12_months: true
+      - auditor_is_independent: true       # not employed by employer or vendor
+      - audit_covers_race_ethnicity: true
+      - audit_covers_sex: true
+      - impact_ratio_calculated: true
+    required_metadata_keys:
+      - bias_audit_date
+      - bias_audit_provider
+      - auditor_independence_declaration
+      - audit_covers_categories          # ["race_ethnicity", "sex"]
+    threshold:
+      audit_age_months: 12               # must be within last 12 months
+    threshold_provenance:
+      source: "NYC Admin Code §20-871(a); NYC DCWP Final Rules §5-300 (April 2023)"
+      confidence: HIGH
+      notes: >
+        The 12-month annual requirement is explicit in the law.
+        The DCWP final rules clarify that the audit must cover
+        race/ethnicity and sex at minimum. Intersectional
+        categories are recommended but not required.
+    remediation: >
+      Commission a bias audit from a qualified independent third
+      party before deployment. Retain auditor independence
+      declaration. Ensure audit covers race/ethnicity and sex
+      selection rates and impact ratios. Repeat annually.
+      Budget: typical audit costs $5,000–$25,000 depending on
+      model complexity and dataset size.
+
+  - id: RULE-LL144-002
+    name: Public Posting of Bias Audit Results
+    article: "NYC Admin Code §20-871(b) — Publication Requirement"
+    article_url: "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-123186"
+    type: attestation
+    stage: pre_deployment
+    severity: BLOCK
+    description: >
+      Bias audit summary results must be publicly posted on the
+      employer's website at least 10 business days before using
+      the AEDT. The posting must remain publicly available for
+      at least as long as the AEDT is used, plus 3 years after
+      the employer stops using it.
+    what_biasops_checks:
+      - audit_results_publicly_posted: true
+      - posting_url_accessible: true
+      - posting_date_at_least_10_business_days_before_deployment: true
+      - posting_includes_distribution_of_candidates: true
+      - posting_includes_impact_ratios: true
+    required_metadata_keys:
+      - bias_audit_results_url
+      - bias_audit_posting_date
+    threshold:
+      posting_lead_time_business_days: 10
+    threshold_provenance:
+      source: "NYC Admin Code §20-871(b); NYC DCWP Final Rules §5-301"
+      confidence: HIGH
+      notes: >
+        A 2024 CatLab/Consumer Reports review found only 18 of
+        391 employers subject to the law had posted audit results.
+        Enforcement has been light but non-zero. DCWP has issued
+        notices of violation. BiasOps verifies posting existence
+        and URL accessibility.
+    remediation: >
+      Post bias audit summary to a publicly accessible URL on
+      your company website at least 10 business days before
+      first use of the AEDT. Include: selection rates by
+      race/ethnicity and sex, impact ratios, and the date of
+      the audit. Record the URL in bias_audit_results_url metadata.
+
+  - id: RULE-LL144-003
+    name: Candidate Notice — 10 Business Days Advance
+    article: "NYC Admin Code §20-872 — Notice to Candidates"
+    article_url: "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-123186"
+    type: attestation
+    stage: pre_deployment
+    severity: BLOCK
+    description: >
+      Employers must notify candidates that an AEDT will be used
+      in their assessment at least 10 business days before using
+      the tool. Notice must include: that an AEDT is being used,
+      what job qualifications or characteristics the AEDT assesses,
+      instructions for requesting an alternative selection process,
+      and information about how to request the data collected
+      about the candidate.
+    what_biasops_checks:
+      - candidate_notice_implemented: true
+      - notice_lead_time_business_days: 10
+      - notice_includes_aedt_disclosure: true
+      - notice_includes_qualifications_assessed: true
+      - notice_includes_alternative_process_option: true
+      - notice_includes_data_request_instructions: true
+    required_config_keys:
+      - candidate_notice_implemented
+      - notice_lead_time_business_days        # must be >= 10
+      - notice_delivery_method                # email | portal | mail
+      - alternative_selection_process_url
+      - candidate_data_request_contact
+    threshold:
+      notice_lead_time_business_days: 10
+    threshold_provenance:
+      source: "NYC Admin Code §20-872(a)-(b); NYC DCWP Final Rules §5-302"
+      confidence: HIGH
+    remediation: >
+      Build a candidate notice workflow triggered at least 10
+      business days before AI screening begins. Notice must be
+      in plain language and include all four required elements.
+      Provide a genuine alternative process for candidates who
+      opt out of AI screening — this cannot be a dead end.
+
+  - id: RULE-LL144-004
+    name: Candidate Data Request Process
+    article: "NYC Admin Code §20-872(b) — Data Transparency"
+    article_url: "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-123186"
+    type: attestation
+    stage: pre_deployment
+    severity: WARN
+    description: >
+      Upon request, employers must provide candidates with the
+      data collected about them that was used as input to the
+      AEDT. This must be provided within a reasonable timeframe.
+      BiasOps marks this WARN (not BLOCK) because the DCWP
+      rules treat the data request mechanism as an ongoing
+      operational requirement rather than a pre-deployment gate.
+    what_biasops_checks:
+      - candidate_data_request_process_defined: true
+      - response_sla_documented: true
+      - data_format_specified: true
+    required_config_keys:
+      - candidate_data_request_contact
+      - candidate_data_request_sla_days
+    threshold_provenance:
+      source: "NYC Admin Code §20-872(b); NYC DCWP Final Rules §5-302(b)"
+      confidence: HIGH
+    remediation: >
+      Define a process for responding to candidate data requests.
+      Document SLA (recommended: 30 days). Specify the format
+      in which data will be provided. Include contact information
+      in the candidate notice.
+
+  - id: RULE-LL144-005
+    name: Record Retention
+    article: "NYC Admin Code §20-873 — Record Keeping"
+    article_url: "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-123186"
+    type: attestation
+    stage: runtime
+    severity: WARN
+    description: >
+      Employers must retain bias audit results and candidate
+      notices for at least 3 years after the AEDT is last used.
+      The audit results must remain publicly posted for the same
+      period after discontinuing the tool.
+    what_biasops_checks:
+      - audit_record_retention_years: 3
+      - candidate_notice_record_retention_years: 3
+    required_config_keys:
+      - audit_retention_policy_years          # must be >= 3
+      - notice_retention_policy_years         # must be >= 3
+    threshold:
+      retention_years: 3
+    threshold_provenance:
+      source: "NYC Admin Code §20-873; NYC DCWP Final Rules §5-303"
+      confidence: HIGH
+    remediation: >
+      Ensure audit results and candidate notices are stored in
+      a system with a minimum 3-year retention policy after the
+      AEDT is decommissioned. Do not delete audit records when
+      you stop using the tool — the clock starts at last use.
+
+# ============================================================
+# NOTE ON NUMERIC COVERAGE
+# ============================================================
+# NYC LL144 requires the bias audit to compute:
+#   - selection_rate by race/ethnicity and sex
+#   - impact_ratio (= adverse_impact_ratio) by same categories
+#
+# These are already covered by RULE-EEOC-001 (adverse_impact_ratio)
+# and RULE-EEOC-002 (demographic_parity_gap) in the EEOC policy.
+# When both policies are loaded together, the engine deduplicates
+# on metric_id — one computation satisfies both policies.
+#
+# cross_policy_overlap tells the engine this explicitly:
+
+cross_policy_overlap:
+  - this_rule: RULE-LL144-001
+    eeoc_rule: RULE-EEOC-001
+    overlap: >
+      The bias audit required by LL144 must compute impact_ratio,
+      which equals adverse_impact_ratio. The EEOC RULE-EEOC-001
+      computation satisfies the numeric requirement of this audit.
+      BiasOps deduplicates: one metric_id computation, two rules satisfied.
+
+remediation_map:
+  RULE-LL144-001: "Commission annual independent bias audit before deployment"
+  RULE-LL144-002: "Post audit results publicly >= 10 business days before deployment"
+  RULE-LL144-003: "Implement candidate notice workflow with all 4 required elements"
+  RULE-LL144-004: "Define candidate data request process with documented SLA"
+  RULE-LL144-005: "Retain audit records and notices for >= 3 years after last AEDT use"
+
+created_at: "2026-03-24T00:00:00Z"
+updated_at: "2026-03-24T00:00:00Z"

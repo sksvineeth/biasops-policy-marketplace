@@ -1,0 +1,296 @@
+# ============================================================
+# BiasOps Policy: Illinois HB 3773 (2024)
+# Amendment to Illinois Human Rights Act — AI in Employment
+# Version: 1.0.0
+# ============================================================
+#
+# SCOPE
+# -----
+# Applies to any employer in Illinois using AI, including
+# generative AI, to make or inform decisions about:
+# recruitment, hiring, promotion, renewal of employment,
+# training, discipline, discharge, or any other term or
+# condition of employment.
+#
+# WHAT MAKES ILLINOIS DIFFERENT FROM NYC LL144
+# ---------------------------------------------
+# NYC LL144: narrower scope (AEDTs only), stricter process
+#            (mandatory audit, public posting)
+# Illinois:  broader scope (any AI in employment), outcome-focused
+#            (discriminatory effect regardless of intent),
+#            ZIP code proxy ban explicit in statute,
+#            notice required but no audit mandate
+#
+# EFFECTIVE DATE: January 1, 2026
+# Illinois IDHR draft implementing rules published Dec 2025,
+# final rules pending as of March 2026.
+#
+# IMPORTANT: No numeric threshold specified in statute.
+# Compliance is outcome-based — "effect of subjecting employees
+# to discrimination." EEOC RULE-EEOC-001 (AIR >= 0.80) is the
+# most defensible operationalisation of this standard.
+# ============================================================
+
+id: IL-HB3773-001
+name: Illinois HB 3773 — AI Employment Discrimination Prohibition
+version: 1.0.0
+domain: hr-employment
+jurisdiction: US-IL
+risk_level: HIGH
+enforcement_mode: block
+maintained_by: BiasOps Core Team
+effective_date: "2026-01-01"
+last_reviewed: "2026-03-24"
+enforced_by: Illinois Department of Human Rights (IDHR)
+penalties:
+  civil_penalty: "up to $50,000 per violation"
+  remedies: "back pay, reinstatement, emotional distress damages, attorney's fees"
+
+applies_to:
+  - any_ai_in_employment_decisions
+  - generative_ai_in_hiring
+  - resume_screening
+  - candidate_ranking
+  - interview_ai
+  - performance_review_ai
+  - promotion_decision_tools
+  - discipline_and_discharge_ai
+
+applies_when:
+  - employer_in_illinois: true
+  - ai_used_for_employment_decision: true
+  - note: >
+      Broader than NYC LL144 — covers ALL AI tools used in any
+      employment decision, not just AEDTs that substantially
+      assist or replace human decisions. If an AI tool is in
+      the workflow at all, this law applies.
+
+protected_classes:                 # Illinois Human Rights Act protected characteristics
+  - race
+  - color
+  - religion
+  - sex
+  - national_origin
+  - ancestry
+  - age                            # IHRA: age 40+
+  - order_of_protection_status
+  - marital_status
+  - physical_disability
+  - mental_disability
+  - military_status
+  - sexual_orientation
+  - pregnancy
+  - unfavorable_discharge_from_military
+  - note: >
+      Illinois IHRA covers more protected classes than Title VII.
+      BiasOps checks all declared protected_cols against this list.
+
+regulation_references:
+  - article: "Illinois HB 3773 (2024) — Amendment to IHRA §2-102(L)"
+    url: "https://www.ilga.gov/legislation/BillStatus.asp?DocNum=3773&GAID=17&DocTypeID=HB"
+    jurisdiction: US-IL
+  - article: "Illinois Human Rights Act 775 ILCS 5/2-102"
+    url: "https://www.ilga.gov/legislation/ilcs/ilcs5.asp?ActID=2266"
+    jurisdiction: US-IL
+  - article: "IDHR Draft Rules Subpart J — AI in Employment (Dec 2025)"
+    url: "https://dhr.illinois.gov"
+    jurisdiction: US-IL
+    status: draft                  # final rules pending as of March 2026
+
+# ============================================================
+# RULES
+# ============================================================
+
+rules:
+
+  - id: RULE-IL-001
+    name: No Discriminatory Effect from AI Use
+    article: "Illinois HB 3773 §2-102(L)(1) — Prohibited AI Discrimination"
+    article_url: "https://www.ilga.gov/legislation/BillStatus.asp?DocNum=3773&GAID=17&DocTypeID=HB"
+    type: numeric
+    metric_id: adverse_impact_ratio      # inherits from EEOC — same computation
+    stage: post_training
+    severity: BLOCK
+    description: >
+      HB 3773 prohibits using AI in a way that "has the effect of
+      subjecting employees to discrimination" based on IHRA protected
+      classes — regardless of intent. This is an outcome standard.
+      The adverse impact ratio (4/5ths rule) is the most legally
+      established operationalisation of whether an AI tool produces
+      a discriminatory effect. Illinois does not specify a numeric
+      threshold, so BiasOps applies the EEOC UGESP standard (0.80)
+      as the most defensible available measure.
+    threshold: 0.80
+    operator: ">="
+    threshold_provenance:
+      source: >
+        Illinois HB 3773 §2-102(L)(1); threshold derived from
+        EEOC Uniform Guidelines 29 CFR §1607.4(D) (1978) as
+        the most legally established operationalisation of
+        "discriminatory effect" for AI employment tools.
+        Illinois statute does not specify a numeric threshold.
+      confidence: MEDIUM
+      notes: >
+        Confidence is MEDIUM (not HIGH as in EEOC policy) because
+        Illinois does not cite the UGESP or specify 0.80 in statute.
+        BiasOps applies 0.80 as the best available proxy. If IDHR
+        final rules specify a different threshold, this will be
+        updated. Flag to customer: verify with Illinois employment
+        counsel before relying solely on this threshold.
+      pending: "IDHR final implementing rules — expected 2026"
+    remediation: >
+      Same remediation as RULE-EEOC-001. Illinois and EEOC numeric
+      rule share the same metric_id — the engine deduplicates.
+      See EEOC policy RULE-EEOC-001 remediation for details.
+
+  - id: RULE-IL-002
+    name: ZIP Code Proxy Ban
+    article: "Illinois HB 3773 §2-102(L)(2) — Prohibited Proxies"
+    article_url: "https://www.ilga.gov/legislation/BillStatus.asp?DocNum=3773&GAID=17&DocTypeID=HB"
+    type: attestation
+    stage: pre_training
+    severity: BLOCK
+    description: >
+      HB 3773 explicitly prohibits using ZIP codes as a proxy for
+      protected classes in AI employment tools. This is one of the
+      few provisions in US hiring AI law that names a specific
+      variable by type. ZIP code is well-documented as a proxy
+      for race (redlining legacy), national origin, and religion
+      in urban areas.
+    what_biasops_checks:
+      - zip_code_not_in_feature_set: true
+      - postal_code_not_in_feature_set: true
+      - no_geographic_proxy_correlated_with_protected: true
+    columns_to_reject:
+      - zip_code
+      - postal_code
+      - zip
+      - zipcode
+    correlation_check:
+      max_correlation_with_protected: 0.50
+      note: >
+        Illinois sets a lower bar than EEOC RULE-EEOC-004 (0.70)
+        because the ZIP code proxy is explicitly named in statute.
+        BiasOps flags any geographic feature correlated > 0.50
+        with a protected attribute.
+    threshold_provenance:
+      source: "Illinois HB 3773 §2-102(L)(2) — explicit statutory prohibition"
+      confidence: HIGH
+      notes: >
+        This is one of the clearest provisions in US hiring AI law —
+        ZIP codes are named directly in the statute. No threshold
+        interpretation required for the binary check.
+    remediation: >
+      Remove ZIP code and postal code from the feature set entirely.
+      If geographic proximity is a legitimate job requirement
+      (e.g. on-site role), use a binary within_commutable_distance
+      flag instead — do not use the raw ZIP code. Document the
+      feature removal decision.
+
+  - id: RULE-IL-003
+    name: Employer Notice to Applicants and Employees
+    article: "Illinois HB 3773 §2-102(L)(3) — Notice Requirement"
+    article_url: "https://www.ilga.gov/legislation/BillStatus.asp?DocNum=3773&GAID=17&DocTypeID=HB"
+    type: attestation
+    stage: pre_deployment
+    severity: BLOCK
+    description: >
+      HB 3773 requires employers to notify applicants and employees
+      that AI is being used in employment decisions. The IDHR draft
+      rules (December 2025) specify the notice must be provided
+      before or at the time the AI tool is used. Unlike NYC LL144,
+      no 10-business-day advance notice is required and no
+      alternative process must be offered. The mechanics of notice
+      are still being finalised in IDHR rulemaking.
+    what_biasops_checks:
+      - applicant_ai_notice_implemented: true
+      - employee_ai_notice_implemented: true
+      - notice_provided_before_or_at_time_of_use: true
+    required_config_keys:
+      - applicant_notice_implemented
+      - employee_notice_implemented
+      - notice_timing               # before_use | at_time_of_use
+      - notice_delivery_method      # email | portal | job_posting | handbook
+    threshold_provenance:
+      source: >
+        Illinois HB 3773 §2-102(L)(3); IDHR Draft Rules Subpart J
+        (December 2025) — final rules pending
+      confidence: MEDIUM
+      notes: >
+        Confidence MEDIUM because IDHR implementing rules are not
+        yet final. The notice requirement is clear in statute but
+        the exact mechanics (format, timing, content) are in draft.
+        BiasOps will update when final rules publish.
+      pending: "IDHR final rules — expected mid-2026"
+    remediation: >
+      Add AI disclosure to job postings, application workflows,
+      and employee communications. Notice must state that AI is
+      used in the relevant employment decisions. Recommended:
+      include in offer letter, job application confirmation email,
+      and employee handbook. Update when IDHR final rules publish.
+
+  - id: RULE-IL-004
+    name: Expanded Protected Class Coverage Check
+    article: "Illinois Human Rights Act 775 ILCS 5/2-102"
+    article_url: "https://www.ilga.gov/legislation/ilcs/ilcs5.asp?ActID=2266"
+    type: attestation
+    stage: post_training
+    severity: WARN
+    description: >
+      The IHRA covers more protected classes than Title VII. In
+      addition to the 5 federal classes, Illinois protects: age
+      (40+), disability (physical and mental), marital status,
+      military status, sexual orientation, pregnancy, and ancestry.
+      If the model training data or evaluation includes features
+      correlated with these additional classes, they must be
+      analysed for discriminatory effect.
+    what_biasops_checks:
+      - illinois_extended_classes_analysed: true
+      - age_group_analysis_completed: true
+      - disability_proxy_check_completed: true
+    additional_protected_cols_to_analyse:
+      - age                         # compute AIR with age groups if present
+      - disability_status           # if declared — compute AIR
+      - marital_status              # if present in data
+    threshold_provenance:
+      source: "Illinois Human Rights Act 775 ILCS 5/1-103 — protected classes"
+      confidence: HIGH
+    remediation: >
+      Run adverse impact analysis for any IHRA-protected attribute
+      present in the data. If age is in the dataset, group into
+      40+ vs under-40 and compute AIR. Document analysis results
+      in the adverse impact report per EEOC RULE-EEOC-009.
+
+# ============================================================
+# CROSS-POLICY OVERLAP
+# ============================================================
+
+cross_policy_overlap:
+  - this_rule: RULE-IL-001
+    eeoc_rule: RULE-EEOC-001
+    overlap: >
+      Both rules use metric_id: adverse_impact_ratio.
+      Engine deduplicates — one computation, two rules satisfied.
+      Illinois MEDIUM confidence vs EEOC HIGH confidence.
+      Report shows both citations.
+
+  - this_rule: RULE-IL-002
+    eeoc_rule: RULE-EEOC-004
+    overlap: >
+      Both rules address proxy variable removal.
+      Illinois is stricter: ZIP code named explicitly, correlation
+      threshold 0.50 vs EEOC's 0.70. Engine applies the stricter
+      threshold (0.50) when both policies are loaded.
+
+# ============================================================
+# REMEDIATION MAP
+# ============================================================
+
+remediation_map:
+  RULE-IL-001: "No discriminatory effect — AIR >= 0.80 required; same as EEOC RULE-EEOC-001"
+  RULE-IL-002: "Remove ZIP code and postal code from feature set entirely"
+  RULE-IL-003: "Add AI disclosure to job postings and application workflows before use"
+  RULE-IL-004: "Extend adverse impact analysis to Illinois-specific protected classes"
+
+created_at: "2026-03-24T00:00:00Z"
+updated_at: "2026-03-24T00:00:00Z"
