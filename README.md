@@ -192,10 +192,10 @@ BiasOps is a central, growing library of executable compliance policies organize
 
 | ID | Policy | Regulation | Jurisdiction | Risk | Status |
 |---|---|---|---|---|---|
-| EEOC-TITLE7-001 | Hiring Disparate Impact 80% Rule | EEOC Title VII | US | CRITICAL | ✅ Active |
-| NYC-LL144-001 | Automated Employment Decisions | NYC Local Law 144 | US-NYC | HIGH | 🔜 Coming |
-| IL-AEDT-001 | Bias Audit Requirements | Illinois AEDT | US-IL | HIGH | 🔜 Coming |
-| CO-AI-ACT-001 | Employment AI Provisions | Colorado AI Act | US-CO | HIGH | 🔜 Coming |
+| EEOC-TITLE7-001 | Hiring Disparate Impact 80% Rule | EEOC Title VII | US | CRITICAL | ✅ Active — v2.0.0 |
+| NYC-LL144-001 | Automated Employment Decision Tools | NYC Local Law 144 | US-NYC | HIGH | ✅ Active — v1.0.0 |
+| IL-HB3773-001 | AI Employment Discrimination Prohibition | Illinois HB 3773 | US-IL | HIGH | ✅ Active — v1.0.0 |
+| CO-SB24205-001 | High-Risk AI in Employment | Colorado AI Act SB 24-205 | US-CO | HIGH | ✅ Active — v1.0.0 |
 | ADA-001 | Disability Discrimination in Hiring | ADA Title I | US | CRITICAL | 🔜 Coming |
 | ADEA-001 | Age Discrimination 40 Plus | ADEA | US | HIGH | 🔜 Coming |
 
