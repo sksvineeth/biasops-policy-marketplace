@@ -186,14 +186,12 @@ class Policy(BaseModel):
         examples=["EU", "US-Federal"],
     )
     regulation_references: list[RegulationReference] = Field(
-        ...,
+        default_factory=list,
         description="Regulations this policy helps satisfy.",
-        min_length=1,
     )
     bias_types_addressed: list[str] = Field(
-        ...,
+        default_factory=list,
         description="Bias categories covered by this policy.",
-        min_length=1,
         examples=[["gender", "racial"]],
     )
     risk_level: RiskLevel = Field(
@@ -205,16 +203,16 @@ class Policy(BaseModel):
         description="Action taken when a violation is detected.",
     )
     policy_logic: dict = Field(
-        ...,
-        description="Declarative rule tree evaluated by the engine.",
+        default_factory=dict,
+        description="Declarative rule tree evaluated by the engine. "
+        "v2.0.0 policies use the 'rules' array instead.",
     )
     remediation_steps: list[str] = Field(
-        ...,
+        default_factory=list,
         description="Ordered list of recommended remediation actions.",
-        min_length=1,
     )
-    created_at: datetime = Field(
-        ...,
+    created_at: datetime | None = Field(
+        default=None,
         description="UTC timestamp when the policy was authored.",
     )
     maintained_by: str = Field(
